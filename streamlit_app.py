@@ -196,6 +196,66 @@ with tab1:
 
 with tab2:
   col21, col22, col23 = st.columns([12, 2, 32])
+  col21, col22, col23 = st.columns([12, 2, 32])
 
-  st.error("under construction")
+  with col21:
+    st.text("‎") 
+    st.write("Simulation Controls")
+    with st.expander("**Base**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        DCKFCCost = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCost", value=31.65)
+        DCKFCGrowth = st.number_input("KFC SSSG (%)", key="DCKFCGrowth", value=31.65)
+      with col212:
+        DCPHCost = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCost", value=1.42)
+        DCPHgrowth = st.number_input("KFC SSSG (%)", key="DCPHgrowth", value=31.65)
+    with st.expander("**Deviation**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        DCDevMin = st.number_input("Min (%)", key="DCDevMin", value=-2.8)
+      with col212:
+        DCDevMax = st.number_input("Max (%)", key="DCDevMax", value=6.21)
+
+  with col22:
+    st.text("‎") 
+
+  with col23:
+    st.text("‎") 
+    #API call 
+    # alldata = definedCombination(inputData)
+    # outputs = alldata.json()['response_data']['outputs']
+    st.write("Simulation Results")
+
+    with st.expander("**Illustration**", expanded=True):
+      st.markdown('***')
+      col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
+      with col1:
+        formatted_monthlypayment = "{:,.0f}".format(1234)
+        st.metric(label='Number of Simulations', value=formatted_monthlypayment)
+      with col2:
+        formatted_monthlypayment = "{:,.0f}".format(1234)
+        st.metric(label='Avg Cost of Goods ($)', value=formatted_monthlypayment)
+      with col3:  
+        formatted_totalpayment = "{:,.0f}".format(1234)
+        st.metric(label='Avg Profit b.Tax ($)', value=formatted_totalpayment)
+      with col4:  
+        formatted_interest = "{:,.0f}".format(1234)
+        st.metric(label='Avg Revenue ($)', value=formatted_interest)
+      with col5:  
+        formatted_totalinterest = "{:,.0f}".format(1234)
+        st.metric(label='Avg Target Price ($)', value=formatted_totalinterest)
+      st.markdown('***')
+
+      # #generate line chart of results
+      # df_simresults = pd.DataFrame(outputs["Sim_Results"])
+      # fig_simresults = go.Figure()
+      # config_simresults = {
+      #     'x_column': 'Testcase',
+      #     'title': '      Testcase'
+      # }
+      # generate_line_chart(fig_simresults, df_simresults, config_simresults)
+      st.plotly_chart(fig_simresults, use_container_width=True)
+
+      # st.markdown('***')
+      st.dataframe(df_simresults, use_container_width=True)
 
