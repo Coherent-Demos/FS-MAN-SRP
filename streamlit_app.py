@@ -4,10 +4,55 @@ import json
 import pandas as pd
 import datetime
 
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
+
 st.set_page_config(layout="wide")
 
 @st.cache_data
-def callSparkModel(inputdata):
+def normalDistribution(inputData):
+
+    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/CLSA/services/Xcall Solution - Yum China - Normal Distn/Execute"
+
+    payload = json.dumps({
+       "request_data": {
+          "inputs": {
+            "Simualtions": inputData["NDNumberOfSimulations"],
+            "Stat_Inputs": [
+              {
+                "Statistical Inputs": "Historical Mean",
+                "KFC_Cost_of_Sales": inputData["NDKFCCostMean"],
+                "KFC_Same_store_sales_growth": inputData["NDKFCGrowthMean"],
+                "Pizza_hut_Cost_of_Sales": inputData["NDPHCostMean"],
+                "Pizza_hut_Same_store_sales_growth": inputData["NDPHGrowthMean"]
+              },
+              {
+                "Statistical Inputs": "Historical Stainputndard Deviation",
+                "KFC_Cost_of_Sales": inputData["NDKFCCostDev"],
+                "KFC_Same_store_sales_growth": inputData["NDKFCGrowthDev"],
+                "Pizza_hut_Cost_of_Sales": inputData["NDPHCostDev"],
+                "Pizza_hut_Same_store_sales_growth": inputData["NDPHGrowthDev"]
+              }
+            ]
+          }
+       },
+        "request_meta": {
+            "compiler_type": "Neuron",
+        }
+    })
+    headers = {
+       'Content-Type': 'application/json',
+       'x-tenant-name': 'coherent',
+       'SecretKey': '2277565c-9fad-4bf4-ad2b-1efe5748dd11'
+    }
+
+
+    response = requests.request("POST", url, headers=headers, data=payload, allow_redirects=False)
+    return response
+
+@st.cache_data
+def definedCombination(inputdata):
 
     url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/loan-origination/Execute"
 
@@ -45,90 +90,112 @@ def callSparkModel(inputdata):
     response = requests.request("POST", url, headers=headers, data=payload, allow_redirects=False)
     return response
 
+def generate_line_chart(fig, data_df, config):
+    for column in data_df.columns:
+        if column != config['x_column']:
+            fig.add_trace(go.Scatter(
+                x=data_df[config['x_column']],
+                y=data_df[column],
+                mode='lines',
+                name=column
+            ))
+    fig.update_layout(title=config['title'])
+
 #Start of UI
 image_path = "coherent-logo.png"
 st.image(image_path, caption="", width=32)
 
-st.write("## Retail Lending - Credit Risk Evaluation and Pricing")
+st.write("## Pricing Simulation")
 
-col21, col22, col23 = st.columns([12, 2, 32])
+tab1, tab2 = st.tabs(['Normal Distribution', 'Defined Combination'])
 
-with col21:
-  st.text("‎") 
-  st.write("Applicant Details")
-  with st.expander("**Loan Details**", expanded=True):
-    LoanAmount = st.text_input("Loan Amount")
-    LoanStart = st.date_input("Loan Start", datetime.date.today())
-    DurationOfLoan = st.slider("Term (months)", 36, 240, (120))
-  with st.expander("**Customer Details**"):
-    ExistingCustomer = st.selectbox('Returning Customer', ['Yes', 'No'], index=0)
-    dobdefault = datetime.date(1980, 1, 1)
-    DOB = st.date_input("Date of Birth", dobdefault)
-    Gender = option = st.radio("Gender", ("Male", "Female"), index=1)
-    Nationality = option = st.radio("Nationality", ("Local", "Non-Local"), index=0)
-    NationalID = st.text_input("National ID", 'E678912(3)')
-    Dependants = st.selectbox('Dependents?', ['0', '1', '2+'], index=0)
-    Education = st.selectbox('Highest Level of Education', ['Primary', 'Secondary', 'Graduate', 'University or above'], index=3)  
-  with st.expander("**Occupation**"):
-    Occupation = st.selectbox('Occupation', ['Finance', 'Student', 'Small business owner', 'Employed - Manufacturing', 'Employed - Agriculture', 'Employed - Travel', 'Employed - Telecom', 'Others'], index=0)
-    Income = st.text_input("Annual Income", '100000')
-  with st.expander("**Residence**"):
-    Living_Area = st.selectbox('Area of Residence', ['Class A City', 'Class B City', 'Class C City', 'Class D City', 'Class E City'], index=0)
-    Home = st.selectbox('Type of Building', ['Rental', 'Selfowned with mortgage', 'Selfowned without mortgage'], index=0)
-  with st.expander("**Channel**"):
-    Channel = st.selectbox('Distribution Channel', ['Agency', 'Branch'], index=0)  
-  inputdata = {
-    "Channel": Channel,
-    "Dependants": Dependants,
-    "DOB": DOB.strftime("%Y-%m-%d"),
-    "DurationOfLoan": DurationOfLoan,
-    "Education": Education,
-    "ExistingCustomer": ExistingCustomer,
-    "Gender": Gender,
-    "Home": Home,
-    "Income": Income,
-    "Living_Area": Living_Area,
-    "LoanAmount": LoanAmount,
-    "LoanStart": LoanStart.strftime("%Y-%m-%d"),
-    "NationalID": NationalID,
-    "Nationality": Nationality,
-    "Occupation": Occupation
-  }   
-  if st.button("Submit Application", type='primary'):    
-    alldata = callSparkModel(inputdata)
+with tab1:
+  col21, col22, col23 = st.columns([12, 2, 32])
+
+  with col21:
+    st.text("‎") 
+    st.write("Simulation Controls")
+    with st.expander("**General**", expanded=True):
+      NDNumberOfSimulations = st.number_input("Number of Simulations", key="NDNumberOfSimulations", value=10, max_value=10)
+    with st.expander("**KFC - Cost of Sales**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        NDKFCCostMean = st.number_input("Historical Mean (%)", key="NDKFCCostMean", value=31.65)
+      with col212:
+        NDKFCCostDev = st.number_input("Historical Deviation (%)", key="NDKFCCostDev", value=1.42)
+    with st.expander("**KFC - Cost of Sales**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        NDKFCGrowthMean = st.number_input("Historical Mean (%)", key="NDKFCGrowthMean", value=-2.8)
+      with col212:
+        NDKFCGrowthDev = st.number_input("Historical Deviation (%)", key="NDKFCGrowthDev", value=6.21)
+    with st.expander("**Pizza Hut - Cost of Sales**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        NDPHCostMean = st.number_input("Historical Mean (%)", key="NDPHCostMean", value=29.43)
+      with col212:
+        NDPHCostDev = st.number_input("Historical Deviation (%)", key="NDPHCostDev", value=1.77)
+    with st.expander("**Pizza Hut - Cost of Sales**", expanded=True):
+      col211, col212 = st.columns([1,1])
+      with col211:
+        NDPHGrowthMean = st.number_input("Historical Mean (%)", key="NDPHGrowthMean", value=-3.78)
+      with col212:
+        NDPHGrowthDev = st.number_input("Historical Deviation (%)", key="NDPHGrowthDev", value=6.04)
+
+  with col22:
+    st.text("‎") 
+
+  with col23:
+    st.text("‎") 
+    #API call 
+    inputData = {
+      "NDNumberOfSimulations": NDNumberOfSimulations,
+      "NDKFCCostMean": NDKFCCostMean,
+      "NDKFCGrowthMean": NDKFCGrowthMean,
+      "NDPHCostMean": NDPHCostMean,
+      "NDPHGrowthMean": NDPHGrowthMean,
+      "NDKFCCostDev": NDKFCCostDev,
+      "NDKFCGrowthDev": NDKFCGrowthDev,
+      "NDPHCostDev": NDPHCostDev,
+      "NDPHGrowthDev": NDPHGrowthDev
+    }
+
+    alldata = normalDistribution(inputData)
     outputs = alldata.json()['response_data']['outputs']
+    st.write("Simulation Results")
 
-with col22:
-  st.text("‎") 
+    with st.expander("**Illustration**", expanded=True):
+      st.markdown('***')
+      col1, col2, col3, col4 = st.columns([1,1,1,1])
+      with col1:
+        formatted_monthlypayment = "{:,.0f}".format(outputs["Avg_Target_Price"])
+        st.metric(label='Avg Cost of Goods ($)', value=formatted_monthlypayment)
+      with col2:  
+        formatted_totalpayment = "{:,.0f}".format(outputs["Avg_Profit_before_Tax"])
+        st.metric(label='Avg Profit b.Tax ($)', value=formatted_totalpayment)
+      with col3:  
+        formatted_interest = "{:,.0f}".format(outputs["Avg_Revenue"])
+        st.metric(label='Avg Revenue ($)', value=formatted_interest)
+      with col4:  
+        formatted_totalinterest = "{:,.0f}".format(outputs["Avg_COGS"])
+        st.metric(label='Avg Target Price ($)', value=formatted_totalinterest)
+      st.markdown('***')
 
-with col23:
-  st.text("‎") 
-  #API call 
-  alldata = callSparkModel(inputdata)
-  outputs = alldata.json()['response_data']['outputs']
-  st.write("Illustration and Scoring")
+      #generate line chart of results
+      df_simresults = pd.DataFrame(outputs["Sim_Results"])
+      fig_simresults = go.Figure()
+      config_simresults = {
+          'x_column': 'Testcase',
+          'title': '      Testcase'
+      }
+      generate_line_chart(fig_simresults, df_simresults, config_simresults)
+      st.plotly_chart(fig_simresults, use_container_width=True)
 
-  with st.expander("**Illustration**", expanded=True):
-    st.markdown('***')
-    col1, col2, col3, col4 = st.columns([1,1,1,1])
-    with col1:
-      formatted_monthlypayment = "{:,.0f}".format(outputs['MonthlyLoanPayment'])
-      st.metric(label='Monthly Payment', value=formatted_monthlypayment)
-    with col2:  
-      formatted_totalpayment = "{:,.0f}".format(outputs['Total_Monthly_Payment'])
-      st.metric(label='Total Payment', value=formatted_totalpayment)
-    with col3:  
-      formatted_interest = "{:.0f}%".format(outputs['LoanRate']*100)
-      st.metric(label='Interest Rate', value=formatted_interest)
-    with col4:  
-      formatted_totalinterest = "{:,.0f}".format(outputs['Total_Interest_Payment'])
-      st.metric(label='Total Interest Paid', value=formatted_totalinterest)
-    st.markdown('***')
-    df_illus = pd.DataFrame(outputs['Amortization'])
-    st.write(df_illus)
-  # with st.expander("**Scoring Details**"):
-  #   st.error('Under construction')
-  # with st.expander("**API Results**"):  
-  #   st.write(outputs)
+      st.markdown('***')
+      st.dataframe(df_simresults, use_container_width=True)
 
+with tab2:
+  col21, col22, col23 = st.columns([12, 2, 32])
+
+  st.error("under construction")
 
