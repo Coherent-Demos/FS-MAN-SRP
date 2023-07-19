@@ -195,7 +195,7 @@ with tab1:
       col1, col2, col3, col4 = st.columns([1,1,1,1])
       with col1:
         formatted_monthlypayment = "{:,.0f}".format(outputs["Avg_Target_Price"])
-        st.metric(label='Avg Cost of Goods ($)', value=formatted_monthlypayment)
+        st.metric(label='Avg Target Price ($)', value=formatted_monthlypayment)
       with col2:  
         formatted_totalpayment = "{:,.0f}".format(outputs["Avg_Profit_before_Tax"])
         st.metric(label='Avg Profit b.Tax ($)', value=formatted_totalpayment)
@@ -204,7 +204,7 @@ with tab1:
         st.metric(label='Avg Revenue ($)', value=formatted_interest)
       with col4:  
         formatted_totalinterest = "{:,.0f}".format(outputs["Avg_COGS"])
-        st.metric(label='Avg Target Price ($)', value=formatted_totalinterest)
+        st.metric(label='Avg Cost of Goods ($)', value=formatted_totalinterest)
       st.markdown('***')
 
       #generate line chart of results
