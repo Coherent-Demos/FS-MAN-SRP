@@ -308,20 +308,20 @@ with tab2:
 
         DCbutton_clicked = st.form_submit_button("Submit", use_container_width=True)
         if DCbutton_clicked:
-          #API call 
-          inputData2 = {
-            "DCKFCCost": DCKFCCost / 100, 
-            "DCKFCSSSG": DCKFCSSSG / 100, 
-            "DCPHCost": DCPHCost / 100, 
-            "DCPHSSSG": DCPHSSSG / 100, 
-            "DCMaxDev": DCMaxDev / 100, 
-            "DCMinDev": DCMinDev / 100,
-            "DCStep": DCStep / 100
-          }
-          DCalldata = definedCombination(inputData2)
-          DCoutputs = DCalldata.json()['response_data']['outputs']
-          df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
-          st.write("asdf")
+          # #API call 
+          # inputData2 = {
+          #   "DCKFCCost": DCKFCCost / 100, 
+          #   "DCKFCSSSG": DCKFCSSSG / 100, 
+          #   "DCPHCost": DCPHCost / 100, 
+          #   "DCPHSSSG": DCPHSSSG / 100, 
+          #   "DCMaxDev": DCMaxDev / 100, 
+          #   "DCMinDev": DCMinDev / 100,
+          #   "DCStep": DCStep / 100
+          # }
+          # DCalldata = definedCombination(inputData2)
+          # DCoutputs = DCalldata.json()['response_data']['outputs']
+          # df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
+          st.write("Under construction")
 
   with col22:
     st.text("‎") 
