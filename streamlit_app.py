@@ -329,82 +329,82 @@ with tab2:
   with col23:
     st.text("‎") 
     st.write("Simulation Results")
-    #API call 
-    inputData2 = {
-      "DCKFCCost": DCKFCCost / 100, 
-      "DCKFCSSSG": DCKFCSSSG / 100, 
-      "DCPHCost": DCPHCost / 100, 
-      "DCPHSSSG": DCPHSSSG / 100, 
-      "DCMaxDev": DCMaxDev / 100, 
-      "DCMinDev": DCMinDev / 100,
-      "DCStep": DCStep / 100
-    }
-    DCalldata = definedCombination(inputData2)
-    DCoutputs = DCalldata.json()['response_data']['outputs']
-    df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
+    # #API call 
+    # inputData2 = {
+    #   "DCKFCCost": DCKFCCost / 100, 
+    #   "DCKFCSSSG": DCKFCSSSG / 100, 
+    #   "DCPHCost": DCPHCost / 100, 
+    #   "DCPHSSSG": DCPHSSSG / 100, 
+    #   "DCMaxDev": DCMaxDev / 100, 
+    #   "DCMinDev": DCMinDev / 100,
+    #   "DCStep": DCStep / 100
+    # }
+    # DCalldata = definedCombination(inputData2)
+    # DCoutputs = DCalldata.json()['response_data']['outputs']
+    # df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
 
-    with st.expander("**Illustration**", expanded=True):
-      st.markdown('***')
-      col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
-      with col1:
-        DCNumberOfSimulations = "{:,.0f}".format(1234)
-        st.metric(label='Number of Simulations', value=DCNumberOfSimulations)
-      with col2:
-        DCAvgCost = "{:,.0f}".format(1234)
-        st.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
-      with col3:  
-        DCAvgProfit = "{:,.0f}".format(1234)
-        st.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
-      with col4:  
-        DCAvgRevenue = "{:,.0f}".format(1234)
-        st.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
-      with col5:  
-        DCAvgTargetPrice = "{:,.0f}".format(1234)
-        st.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
-      st.markdown('***')
+    # with st.expander("**Illustration**", expanded=True):
+    #   st.markdown('***')
+    #   col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
+    #   with col1:
+    #     DCNumberOfSimulations = "{:,.0f}".format(1234)
+    #     st.metric(label='Number of Simulations', value=DCNumberOfSimulations)
+    #   with col2:
+    #     DCAvgCost = "{:,.0f}".format(1234)
+    #     st.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
+    #   with col3:  
+    #     DCAvgProfit = "{:,.0f}".format(1234)
+    #     st.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
+    #   with col4:  
+    #     DCAvgRevenue = "{:,.0f}".format(1234)
+    #     st.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
+    #   with col5:  
+    #     DCAvgTargetPrice = "{:,.0f}".format(1234)
+    #     st.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
+    #   st.markdown('***')
 
-      #generate line chart of results
-      df_DCCOGS = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[1]]]
-      fig_DCCOGS = go.Figure()
-      config_DCCOGS = {
-          'x_column': 'Testcase',
-          'title': '      COGS',
-          'color': 'purple'
-      }
-      generate_bar_chart(fig_DCCOGS, df_DCCOGS, config_DCCOGS)
-      st.plotly_chart(fig_DCCOGS, use_container_width=True)
+    #   #generate line chart of results
+    #   df_DCCOGS = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[1]]]
+    #   fig_DCCOGS = go.Figure()
+    #   config_DCCOGS = {
+    #       'x_column': 'Testcase',
+    #       'title': '      COGS',
+    #       'color': 'purple'
+    #   }
+    #   generate_bar_chart(fig_DCCOGS, df_DCCOGS, config_DCCOGS)
+    #   st.plotly_chart(fig_DCCOGS, use_container_width=True)
 
-      #generate line chart of results
-      df_DCProfit = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[2]]]
-      fig_DCProfit = go.Figure()
-      config_DCProfit = {
-          'x_column': 'Testcase',
-          'title': '      Profit Before Tax',
-          'color': 'green'
-      }
-      generate_bar_chart(fig_DCProfit, df_DCProfit, config_DCProfit)
-      st.plotly_chart(fig_DCProfit, use_container_width=True)
-      #generate line chart of results
-      df_DCRevenue = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[3]]]
-      fig_DCRevenue = go.Figure()
-      config_DCRevenue = {
-          'x_column': 'Testcase',
-          'title': '      Revenue',
-          'color': 'blue'
-      }
-      generate_bar_chart(fig_DCRevenue, df_DCRevenue, config_DCRevenue)
-      st.plotly_chart(fig_DCRevenue, use_container_width=True)
+    #   #generate line chart of results
+    #   df_DCProfit = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[2]]]
+    #   fig_DCProfit = go.Figure()
+    #   config_DCProfit = {
+    #       'x_column': 'Testcase',
+    #       'title': '      Profit Before Tax',
+    #       'color': 'green'
+    #   }
+    #   generate_bar_chart(fig_DCProfit, df_DCProfit, config_DCProfit)
+    #   st.plotly_chart(fig_DCProfit, use_container_width=True)
+    #   #generate line chart of results
+    #   df_DCRevenue = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[3]]]
+    #   fig_DCRevenue = go.Figure()
+    #   config_DCRevenue = {
+    #       'x_column': 'Testcase',
+    #       'title': '      Revenue',
+    #       'color': 'blue'
+    #   }
+    #   generate_bar_chart(fig_DCRevenue, df_DCRevenue, config_DCRevenue)
+    #   st.plotly_chart(fig_DCRevenue, use_container_width=True)
       
-      #generate line chart of results
-      df_DCPrice = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[4]]]
-      fig_DCPrice = go.Figure()
-      config_DCPrice = {
-          'x_column': 'Testcase',
-          'title': '      Target Price',
-          'color': 'orange'
-      }
-      generate_bar_chart(fig_DCPrice, df_DCPrice, config_DCPrice)
-      st.plotly_chart(fig_DCPrice, use_container_width=True)
+    #   #generate line chart of results
+    #   df_DCPrice = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[4]]]
+    #   fig_DCPrice = go.Figure()
+    #   config_DCPrice = {
+    #       'x_column': 'Testcase',
+    #       'title': '      Target Price',
+    #       'color': 'orange'
+    #   }
+    #   generate_bar_chart(fig_DCPrice, df_DCPrice, config_DCPrice)
+    #   st.plotly_chart(fig_DCPrice, use_container_width=True)
 
-      st.markdown('***')
-      st.dataframe(df_DCsimresults, use_container_width=True)
+    #   st.markdown('***')
+    #   st.dataframe(df_DCsimresults, use_container_width=True)
