@@ -62,16 +62,27 @@ def definedCombination(inputdata):
           "inputs": {
             "Base_Inputs": [
               {
-                "#": "Base",
-                "KFC_Cost_of_Sales": inputdata["DCKFCCost"],
-                "KFC_Same_store_sales_growth": inputdata["DCKFCSSSG"],
-                "Pizza_hut_Cost_of_Sales": inputdata["DCPHCost"],
-                "Pizza_hut_Same_store_sales_growth": inputdata["DCPHSSSG"]
+                "Inputs": "Y2023",
+                "KFC cost of sales (%)": inputdata["DCKFCCost2023"],
+                "KFC Same store sales growth %": inputdata["DCKFCSSSG2023"],
+                "Pizza hut cost of sales (%)": inputdata["DCKFCCost2023"],
+                "Pizza hut Same store sales growth %": inputdata["DCKFCSSSG2023"]
+              },
+              {
+                "Inputs": "Y2024",
+                "KFC cost of sales (%)": inputdata["DCKFCCost2024"],
+                "KFC Same store sales growth %": inputdata["DCKFCSSSG2024"],
+                "Pizza hut cost of sales (%)": inputdata["DCPHCost2024"],
+                "Pizza hut Same store sales growth %": inputdata["DCPHSSSG2024"]
+              },
+              {
+                "Inputs": "1 SD",
+                "KFC cost of sales (%)": inputdata["DCKFCCostDev"],
+                "KFC Same store sales growth %": inputdata["DCKFCSSSGDev"],
+                "Pizza hut cost of sales (%)": inputdata["DCPHCostDev"],
+                "Pizza hut Same store sales growth %": inputdata["DCPHSSSGDev"]
               }
-            ],
-            "Max_Deviation": inputdata["DCMaxDev"],
-            "Min_Deviation": inputdata["DCMinDev"],
-            "Step": inputdata["DCStep"]
+            ]
           }
        },
         "request_meta": {
@@ -275,21 +286,30 @@ with tab2:
     st.text("‎") 
     st.write("Simulation Controls")
     with st.form("DC Form"):
-      with st.expander("**Base**", expanded=True):
+      with st.expander("**Y2023**", expanded=True):
         col211, col212 = st.columns([1,1])
         with col211:
-          DCKFCCost = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCost", value=31.65)
-          DCKFCSSSG = st.number_input("KFC SSSG (%)", key="DCKFCSSSG", value=31.65)
+          DCKFCCost2023 = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCost2023", value=31.00)
+          DCKFCSSSG2023 = st.number_input("KFC SSSG (%)", key="DCKFCSSSG2023", value=1.00)
         with col212:
-          DCPHCost = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCost", value=1.42)
-          DCPHSSSG = st.number_input("KFC SSSG (%)", key="DCPHSSSG", value=31.65)
-      with st.expander("**Deviation**", expanded=True):
+          DCPHCost2023 = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCost2023", value=31.00)
+          DCPHSSSG2023 = st.number_input("KFC SSSG (%)", key="DCPHSSSG2023", value=2.00)
+      with st.expander("**Y2024**", expanded=True):
         col211, col212 = st.columns([1,1])
         with col211:
-          DCMinDev = st.number_input("Select a Minimum (%)", min_value=0.0, max_value=100.0, value=1.0, step=0.5)
+          DCKFCCost2024 = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCost2024", value=31.00)
+          DCKFCSSSG2024 = st.number_input("KFC SSSG (%)", key="DCKFCSSSG2024", value=1.00)
         with col212:
-          DCMaxDev = st.number_input("Select a Maximum (%)", min_value=0.0, max_value=100.0, value=10.0, step=0.5)
-        DCStep = st.number_input("Step (%)", min_value=0.0, max_value=100.0, value=0.5, step=0.5)
+          DCPHCost2024 = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCost2024", value=31.00)
+          DCPHSSSG2024 = st.number_input("KFC SSSG (%)", key="DCPHSSSG2024", value=2.00)      
+      with st.expander("**1 SD**", expanded=True):
+        col211, col212 = st.columns([1,1])
+        with col211:
+          DCKFCCostDev = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCostDev", value=6.21)
+          DCKFCSSSGDev = st.number_input("KFC SSSG (%)", key="DCKFCSSSGDev", value=1.42)
+        with col212:
+          DCPHCostDev = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCostDev", value=6.04)
+          DCPHSSSGDev = st.number_input("KFC SSSG (%)", key="DCPHSSSGDev", value=1.77) 
       with st.expander("**Generate Output**", expanded=True):
         st.markdown(
               """
@@ -308,20 +328,24 @@ with tab2:
 
         DCbutton_clicked = st.form_submit_button("Submit", use_container_width=True)
         if DCbutton_clicked:
-          # #API call 
-          # inputData2 = {
-          #   "DCKFCCost": DCKFCCost / 100, 
-          #   "DCKFCSSSG": DCKFCSSSG / 100, 
-          #   "DCPHCost": DCPHCost / 100, 
-          #   "DCPHSSSG": DCPHSSSG / 100, 
-          #   "DCMaxDev": DCMaxDev / 100, 
-          #   "DCMinDev": DCMinDev / 100,
-          #   "DCStep": DCStep / 100
-          # }
-          # DCalldata = definedCombination(inputData2)
-          # DCoutputs = DCalldata.json()['response_data']['outputs']
-          # df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
-          st.write("Under construction")
+          #API call 
+          inputData2 = {
+            "DCKFCCost2023": DCKFCCost2023 / 100,
+            "DCKFCSSSG2023": DCKFCSSSG2023 / 100,
+            "DCKFCCost2023": DCKFCCost2023 / 100,
+            "DCKFCSSSG2023": DCKFCSSSG2023 / 100,
+            "DCKFCCost2024": DCKFCCost2024 / 100,
+            "DCKFCSSSG2024": DCKFCSSSG2024 / 100,
+            "DCPHCost2024": DCPHCost2024 / 100,
+            "DCPHSSSG2024": DCPHSSSG2024 / 100,
+            "DCKFCCostDev": DCKFCCostDev / 100,
+            "DCKFCSSSGDev": DCKFCSSSGDev / 100,
+            "DCPHCostDev": DCPHCostDev / 100,
+            "DCPHSSSGDev": DCPHSSSGDev / 100
+          }
+          DCalldata = definedCombination(inputData2)
+          DCoutputs = DCalldata.json()['response_data']['outputs']
+          df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
 
   with col22:
     st.text("‎") 
@@ -329,82 +353,87 @@ with tab2:
   with col23:
     st.text("‎") 
     st.write("Simulation Results")
-    # #API call 
-    # inputData2 = {
-    #   "DCKFCCost": DCKFCCost / 100, 
-    #   "DCKFCSSSG": DCKFCSSSG / 100, 
-    #   "DCPHCost": DCPHCost / 100, 
-    #   "DCPHSSSG": DCPHSSSG / 100, 
-    #   "DCMaxDev": DCMaxDev / 100, 
-    #   "DCMinDev": DCMinDev / 100,
-    #   "DCStep": DCStep / 100
-    # }
-    # DCalldata = definedCombination(inputData2)
-    # DCoutputs = DCalldata.json()['response_data']['outputs']
-    # df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
+    #API call 
+    inputData2 = {
+      "DCKFCCost2023": DCKFCCost2023 / 100,
+      "DCKFCSSSG2023": DCKFCSSSG2023 / 100,
+      "DCKFCCost2023": DCKFCCost2023 / 100,
+      "DCKFCSSSG2023": DCKFCSSSG2023 / 100,
+      "DCKFCCost2024": DCKFCCost2024 / 100,
+      "DCKFCSSSG2024": DCKFCSSSG2024 / 100,
+      "DCPHCost2024": DCPHCost2024 / 100,
+      "DCPHSSSG2024": DCPHSSSG2024 / 100,
+      "DCKFCCostDev": DCKFCCostDev / 100,
+      "DCKFCSSSGDev": DCKFCSSSGDev / 100,
+      "DCPHCostDev": DCPHCostDev / 100,
+      "DCPHSSSGDev": DCPHSSSGDev / 100
+    }
+    DCalldata = definedCombination(inputData2)
+    DCoutputs = DCalldata.json()['response_data']['outputs']
+    df_DCsimresults = pd.DataFrame(DCoutputs["Sim_Results"])
 
-    # with st.expander("**Illustration**", expanded=True):
-    #   st.markdown('***')
-    #   col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
-    #   with col1:
-    #     DCNumberOfSimulations = "{:,.0f}".format(1234)
-    #     st.metric(label='Number of Simulations', value=DCNumberOfSimulations)
-    #   with col2:
-    #     DCAvgCost = "{:,.0f}".format(1234)
-    #     st.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
-    #   with col3:  
-    #     DCAvgProfit = "{:,.0f}".format(1234)
-    #     st.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
-    #   with col4:  
-    #     DCAvgRevenue = "{:,.0f}".format(1234)
-    #     st.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
-    #   with col5:  
-    #     DCAvgTargetPrice = "{:,.0f}".format(1234)
-    #     st.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
-    #   st.markdown('***')
+    with st.expander("**Illustration**", expanded=True):
+      st.markdown('***')
+      col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
+      with col1:
+        DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
+        st.metric(label='Number of Simulations', value=DCNumberOfSimulations)
+      with col2:
+        DCAvgCost = "{:,.0f}".format(DCoutputs["Avg_COGS"])
+        st.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
+      with col3:  
+        DCAvgProfit = "{:,.0f}".format(DCoutputs["Avg_Profit_before_Tax"])
+        st.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
+      with col4:  
+        DCAvgRevenue = "{:,.0f}".format(DCoutputs["Avg_Revenue"])
+        st.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
+      with col5:  
+        DCAvgTargetPrice = "{:,.0f}".format(DCoutputs["Avg_Target_Price"])
+        st.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
+      st.markdown('***')
 
-    #   #generate line chart of results
-    #   df_DCCOGS = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[1]]]
-    #   fig_DCCOGS = go.Figure()
-    #   config_DCCOGS = {
-    #       'x_column': 'Testcase',
-    #       'title': '      COGS',
-    #       'color': 'purple'
-    #   }
-    #   generate_bar_chart(fig_DCCOGS, df_DCCOGS, config_DCCOGS)
-    #   st.plotly_chart(fig_DCCOGS, use_container_width=True)
+      #generate line chart of results
+      df_DCCOGS = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[1]]]
+      fig_DCCOGS = go.Figure()
+      config_DCCOGS = {
+          'x_column': 'Testcase',
+          'title': '      COGS',
+          'color': 'purple'
+      }
+      generate_bar_chart(fig_DCCOGS, df_DCCOGS, config_DCCOGS)
+      st.plotly_chart(fig_DCCOGS, use_container_width=True)
 
-    #   #generate line chart of results
-    #   df_DCProfit = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[2]]]
-    #   fig_DCProfit = go.Figure()
-    #   config_DCProfit = {
-    #       'x_column': 'Testcase',
-    #       'title': '      Profit Before Tax',
-    #       'color': 'green'
-    #   }
-    #   generate_bar_chart(fig_DCProfit, df_DCProfit, config_DCProfit)
-    #   st.plotly_chart(fig_DCProfit, use_container_width=True)
-    #   #generate line chart of results
-    #   df_DCRevenue = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[3]]]
-    #   fig_DCRevenue = go.Figure()
-    #   config_DCRevenue = {
-    #       'x_column': 'Testcase',
-    #       'title': '      Revenue',
-    #       'color': 'blue'
-    #   }
-    #   generate_bar_chart(fig_DCRevenue, df_DCRevenue, config_DCRevenue)
-    #   st.plotly_chart(fig_DCRevenue, use_container_width=True)
+      #generate line chart of results
+      df_DCProfit = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[2]]]
+      fig_DCProfit = go.Figure()
+      config_DCProfit = {
+          'x_column': 'Testcase',
+          'title': '      Profit Before Tax',
+          'color': 'green'
+      }
+      generate_bar_chart(fig_DCProfit, df_DCProfit, config_DCProfit)
+      st.plotly_chart(fig_DCProfit, use_container_width=True)
+      #generate line chart of results
+      df_DCRevenue = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[3]]]
+      fig_DCRevenue = go.Figure()
+      config_DCRevenue = {
+          'x_column': 'Testcase',
+          'title': '      Revenue',
+          'color': 'blue'
+      }
+      generate_bar_chart(fig_DCRevenue, df_DCRevenue, config_DCRevenue)
+      st.plotly_chart(fig_DCRevenue, use_container_width=True)
       
-    #   #generate line chart of results
-    #   df_DCPrice = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[4]]]
-    #   fig_DCPrice = go.Figure()
-    #   config_DCPrice = {
-    #       'x_column': 'Testcase',
-    #       'title': '      Target Price',
-    #       'color': 'orange'
-    #   }
-    #   generate_bar_chart(fig_DCPrice, df_DCPrice, config_DCPrice)
-    #   st.plotly_chart(fig_DCPrice, use_container_width=True)
+      #generate line chart of results
+      df_DCPrice = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[4]]]
+      fig_DCPrice = go.Figure()
+      config_DCPrice = {
+          'x_column': 'Testcase',
+          'title': '      Target Price',
+          'color': 'orange'
+      }
+      generate_bar_chart(fig_DCPrice, df_DCPrice, config_DCPrice)
+      st.plotly_chart(fig_DCPrice, use_container_width=True)
 
-    #   st.markdown('***')
-    #   st.dataframe(df_DCsimresults, use_container_width=True)
+      st.markdown('***')
+      st.dataframe(df_DCsimresults, use_container_width=True)
