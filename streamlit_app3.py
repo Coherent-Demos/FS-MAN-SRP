@@ -8,7 +8,6 @@ import time
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
-import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
 
@@ -57,7 +56,7 @@ def normalDistribution(inputData):
 def definedCombination(inputdata):
     if 'DCloading' in st.session_state:
       DCloading.warning("Running Simulations")
-    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/Xcall Yum China - Defined Comb - output template3/Execute"
+    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/CLSA/services/Xcall Yum China - Defined Comb - output template/Execute"
 
     payload = json.dumps({
        "request_data": {
@@ -120,30 +119,6 @@ def generate_bar_chart(fig, data_df, config):
     fig.update_yaxes(title_text='Amount ($)')
     fig.update_xaxes(type="category")
 
-def generate_comb_chart(data, value_pairs, title):
-    # Create a DataFrame
-    df = pd.DataFrame(data)
-
-    # Create a bar chart using Matplotlib
-    fig, ax = plt.subplots()
-    ax.bar(df["Historical"], df["Count"], label="Original Data")
-
-    # Plot the new value pairs as vertical lines
-    for label, value in value_pairs.items():
-        line_color = 'yellow' if label == "Analyst Prediction" else '#a0a0a0'
-        line_width = 1 if label == "Analyst Prediction" else 0.5
-        ax.axvline(x=value, color=line_color, linestyle='-', linewidth=line_width, label=f"{label}: {value}")
-
-    # Customize the chart
-    ax.set_xlabel(title)
-    ax.set_ylabel("Count")
-    ax.set_title(title + " Distribution")
-
-    # Add a legend
-    ax.legend()
-
-    return fig
-
 #Start of UI
 image_path = "coherent-logo.png"
 st.image(image_path, caption="", width=32)
@@ -176,7 +151,7 @@ with tab1:
         with col212:
           DCPHCost2024 = st.number_input("Pizza Hut - Cost of Sales (%)", key="DCPHCost2024", value=31.00)
           DCPHSSSG2024 = st.number_input("Pizza Hut - SSSG (%)", key="DCPHSSSG2024", value=2.00)      
-      with st.expander("**Range (Default 1SD)**", expanded=True):
+      with st.expander("**1 SD**", expanded=True):
         col211, col212 = st.columns([1,1])
         with col211:
           DCKFCCostDev = st.number_input("KFC - Cost of Sales (%)", key="DCKFCCostDev", value=6.2146779660914)
@@ -269,37 +244,50 @@ with tab1:
       st.markdown('***')
 
       #generate line chart of results
-      data_rg = pd.DataFrame(DCoutputs["rg_htable"])
-      value_pairs_rg = {
-        "Min": DCoutputs["minmaxtable"][1]["Revenue Growth"],
-        "Max": DCoutputs["minmaxtable"][2]["Revenue Growth"],
-        "Analyst Prediction": DCoutputs["minmaxtable"][0]["Revenue Growth"]
+      df_DCCOGS = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[1]]]
+      fig_DCCOGS = go.Figure()
+      config_DCCOGS = {
+          'x_column': 'Testcase',
+          'title': '      COGS',
+          'color': 'purple'
       }
-      chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
-      st.pyplot(chart_fig)
+      generate_bar_chart(fig_DCCOGS, df_DCCOGS, config_DCCOGS)
+      st.plotly_chart(fig_DCCOGS, use_container_width=True)
 
-      st.markdown('***')
-
-      data_gm = pd.DataFrame(DCoutputs["gm_htable"])
-      value_pairs_gm = {
-        "Min": DCoutputs["minmaxtable"][1]["Gross Margin"],
-        "Max": DCoutputs["minmaxtable"][2]["Gross Margin"],
-        "Analyst Prediction": DCoutputs["minmaxtable"][0]["Gross Margin"]
+      #generate line chart of results
+      df_DCProfit = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[2]]]
+      fig_DCProfit = go.Figure()
+      config_DCProfit = {
+          'x_column': 'Testcase',
+          'title': '      Profit Before Tax',
+          'color': 'green'
       }
-      chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
-      st.pyplot(chart_fig)
-
-      st.markdown('***')
-
-      data_npm = pd.DataFrame(DCoutputs["npm_htable"])
-      value_pairs_npm = {
-        "Min": DCoutputs["minmaxtable"][1]["Net Profit Margin"],
-        "Max": DCoutputs["minmaxtable"][2]["Net Profit Margin"],
-        "Analyst Prediction": DCoutputs["minmaxtable"][0]["Net Profit Margin"]
+      generate_bar_chart(fig_DCProfit, df_DCProfit, config_DCProfit)
+      st.plotly_chart(fig_DCProfit, use_container_width=True)
+      #generate line chart of results
+      df_DCRevenue = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[3]]]
+      fig_DCRevenue = go.Figure()
+      config_DCRevenue = {
+          'x_column': 'Testcase',
+          'title': '      Revenue',
+          'color': 'blue'
       }
-      chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
-      st.pyplot(chart_fig)
+      generate_bar_chart(fig_DCRevenue, df_DCRevenue, config_DCRevenue)
+      st.plotly_chart(fig_DCRevenue, use_container_width=True)
       
+      #generate line chart of results
+      df_DCPrice = df_DCsimresults[[df_DCsimresults.columns[0], df_DCsimresults.columns[4]]]
+      fig_DCPrice = go.Figure()
+      config_DCPrice = {
+          'x_column': 'Testcase',
+          'title': '      Target Price',
+          'color': 'orange'
+      }
+      generate_bar_chart(fig_DCPrice, df_DCPrice, config_DCPrice)
+      st.plotly_chart(fig_DCPrice, use_container_width=True)
+
+      st.markdown('***')
+      st.dataframe(df_DCsimresults, use_container_width=True)
 
 with tab2:
   col21, col22, col23 = st.columns([12, 2, 32])
