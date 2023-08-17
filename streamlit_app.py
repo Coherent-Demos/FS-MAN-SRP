@@ -123,7 +123,7 @@ json_data = [
   {
     "Inputs": "KFC - SSSG (%)",
     "Historical 1 sd": 0.0142,
-    "2023 Point assumption": 0.01,
+    "2023 Point assumption": 0.05,
     "2023 Min": -0.0042,
     "2023 Max": 0.0242,
     "2024 Point assumption": 0.01,
@@ -143,7 +143,7 @@ json_data = [
   {
     "Inputs": "Pizza Hut - SSSG (%)",
     "Historical 1 sd": 0.0177,
-    "2023 Point assumption": 0.02,
+    "2023 Point assumption": 0.07,
     "2023 Min": 0.0023,
     "2023 Max": 0.0377,
     "2024 Point assumption": 0.02,
@@ -164,7 +164,7 @@ with st.form("DC Form"):
   df = pd.DataFrame(json_data)
   numeric_columns = df.select_dtypes(include=[float, int]).columns
   df[numeric_columns] = df[numeric_columns] * 100
-  df[numeric_columns] = df[numeric_columns].applymap('{:.2f}'.format)
+  df[numeric_columns] = df[numeric_columns].applymap('{:.1f}'.format)
 
   inputTable = st.data_editor(
     df.style.apply(highlight_col, axis=None),
