@@ -320,9 +320,9 @@ with st.expander("", expanded=True):
   if not DCerrors:
     data_rg = pd.DataFrame(DCoutputs["rg_htable"])
     value_pairs_rg = {
-      "Min": format(DCoutputs["minmaxtable"][1]["Revenue Growth"], ".1f"),
-      "Max": format(DCoutputs["minmaxtable"][2]["Revenue Growth"], ".1f"),
-      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Revenue Growth"], ".1f")
+      "Min": round(DCoutputs["minmaxtable"][1]["Revenue Growth"], 1),
+      "Max": round(DCoutputs["minmaxtable"][2]["Revenue Growth"], 1),
+      "Analyst Prediction": round(DCoutputs["minmaxtable"][0]["Revenue Growth"], 1)
     }
     chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
     RG_CHART_placeholder.pyplot(chart_fig)
@@ -331,9 +331,9 @@ with st.expander("", expanded=True):
 
     data_gm = pd.DataFrame(DCoutputs["gm_htable"])
     value_pairs_gm = {
-      "Min": format(DCoutputs["minmaxtable"][1]["Gross Margin"], ".1f"),
-      "Max": format(DCoutputs["minmaxtable"][2]["Gross Margin"], ".1f"),
-      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Gross Margin"], ".1f")
+      "Min": round(DCoutputs["minmaxtable"][1]["Gross Margin"], 1),
+      "Max": round(DCoutputs["minmaxtable"][2]["Gross Margin"], 1),
+      "Analyst Prediction": round(DCoutputs["minmaxtable"][0]["Gross Margin"], 1)
     }
     chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
     GM_CHART_placeholder.pyplot(chart_fig)
@@ -342,9 +342,9 @@ with st.expander("", expanded=True):
 
     data_npm = pd.DataFrame(DCoutputs["npm_htable"])
     value_pairs_npm = {
-      "Min": format(DCoutputs["minmaxtable"][1]["Net Profit Margin"], ".2f"),
-      "Max": format(DCoutputs["minmaxtable"][2]["Net Profit Margin"], ".2f"),
-      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Net Profit Margin"], ".2f")
+      "Min": round(DCoutputs["minmaxtable"][1]["Net Profit Margin"], 2),
+      "Max": round(DCoutputs["minmaxtable"][2]["Net Profit Margin"], 2),
+      "Analyst Prediction": round(DCoutputs["minmaxtable"][0]["Net Profit Margin"], 2)
     }
     chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
     NPM_CHART_placeholder.pyplot(chart_fig)
