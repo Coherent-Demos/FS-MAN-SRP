@@ -288,14 +288,14 @@ with st.expander("", expanded=True):
   with col13:
     NPM_CHART_placeholder = st.empty()
 
-  st.markdown('***')
-  col11, col12, col13 = st.columns([1,1,1])
-  with col11:
-    RG_CHART_bf_placeholder = st.empty()
-  with col12:
-    GM_CHART_bf_placeholder = st.empty()
-  with col13:
-    NPM_CHART_bf_placeholder = st.empty()
+  # st.markdown('***')
+  # col11, col12, col13 = st.columns([1,1,1])
+  # with col11:
+  #   RG_CHART_bf_placeholder = st.empty()
+  # with col12:
+  #   GM_CHART_bf_placeholder = st.empty()
+  # with col13:
+  #   NPM_CHART_bf_placeholder = st.empty()
 
   st.markdown('***')
   col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
@@ -320,36 +320,36 @@ with st.expander("", expanded=True):
   if not DCerrors:
     data_rg = pd.DataFrame(DCoutputs["rg_htable"])
     value_pairs_rg = {
-      "Min": DCoutputs["minmaxtable"][1]["Revenue Growth"],
-      "Max": DCoutputs["minmaxtable"][2]["Revenue Growth"],
-      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Revenue Growth"]
+      "Min": format(DCoutputs["minmaxtable"][1]["Revenue Growth"], ".1f"),
+      "Max": format(DCoutputs["minmaxtable"][2]["Revenue Growth"], ".1f"),
+      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Revenue Growth"], ".1f")
     }
     chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
     RG_CHART_placeholder.pyplot(chart_fig)
     chart_fig = generate_comb_chart_best_fit(data_rg, value_pairs_rg, "Revenue Growth")
-    RG_CHART_bf_placeholder.pyplot(chart_fig)
+    # RG_CHART_bf_placeholder.pyplot(chart_fig)
 
     data_gm = pd.DataFrame(DCoutputs["gm_htable"])
     value_pairs_gm = {
-      "Min": DCoutputs["minmaxtable"][1]["Gross Margin"],
-      "Max": DCoutputs["minmaxtable"][2]["Gross Margin"],
-      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Gross Margin"]
+      "Min": format(DCoutputs["minmaxtable"][1]["Gross Margin"], ".1f"),
+      "Max": format(DCoutputs["minmaxtable"][2]["Gross Margin"], ".1f"),
+      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Gross Margin"], ".1f")
     }
     chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
     GM_CHART_placeholder.pyplot(chart_fig)
     chart_fig = generate_comb_chart_best_fit(data_gm, value_pairs_gm, "Gross Margin")
-    GM_CHART_bf_placeholder.pyplot(chart_fig)
+    # GM_CHART_bf_placeholder.pyplot(chart_fig)
 
     data_npm = pd.DataFrame(DCoutputs["npm_htable"])
     value_pairs_npm = {
-      "Min": DCoutputs["minmaxtable"][1]["Net Profit Margin"],
-      "Max": DCoutputs["minmaxtable"][2]["Net Profit Margin"],
-      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Net Profit Margin"]
+      "Min": format(DCoutputs["minmaxtable"][1]["Net Profit Margin"], ".2f"),
+      "Max": format(DCoutputs["minmaxtable"][2]["Net Profit Margin"], ".2f"),
+      "Analyst Prediction": format(DCoutputs["minmaxtable"][0]["Net Profit Margin"], ".2f")
     }
     chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
     NPM_CHART_placeholder.pyplot(chart_fig)
     chart_fig = generate_comb_chart_best_fit(data_npm, value_pairs_npm, "Net Profit Margin")
-    NPM_CHART_bf_placeholder.pyplot(chart_fig)
+    # NPM_CHART_bf_placeholder.pyplot(chart_fig)
 
     DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
     DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
