@@ -5,10 +5,12 @@ import pandas as pd
 import datetime
 import time
 
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 st.set_page_config(layout="wide")
 
@@ -90,6 +92,58 @@ def generate_comb_chart(data, value_pairs, title):
 
     return fig
 
+def gaussian(x, amplitude, mean, stddev):
+    return amplitude * np.exp(-((x - mean) / stddev) ** 2)
+
+def generate_comb_chart_best_fit(data, value_pairs, title):
+    # Create a DataFrame
+    df = pd.DataFrame(data)
+
+    # Set the font family
+    plt.rcParams["font.family"] = ["Arial"]
+
+    # Create a scatter plot using Matplotlib
+    fig, ax = plt.subplots()
+
+    # Scatter plot with smaller dots and custom color
+    ax.scatter(df["Historical"], df["Count"], color='#a0a0a0', label="Original Data", s=30)
+
+    # Fit the model to the data
+    params, covariance = curve_fit(gaussian, df["Historical"], df["Count"], p0=[1, np.mean(df["Historical"]), 1])
+    amplitude, mean, stddev = params
+
+    # Create x values for the fitted curve
+    x_fit = np.linspace(min(df["Historical"]), max(df["Historical"]), 100)
+
+    # Generate the fitted curve using the fitted parameters
+    y_fit = gaussian(x_fit, amplitude, mean, stddev)
+
+    # Plot the fitted curve as a best-fit line with blue color
+    ax.plot(x_fit, y_fit, color='blue', linestyle='-', linewidth=2, label="Best-Fit Line")
+
+    # Plot the new value pairs as vertical lines
+    for label, value in value_pairs.items():
+        line_color = 'red' if label == "Analyst Prediction" else '#f4d35e'
+        line_width = 1
+        ax.axvline(x=value, color=line_color, linestyle='-', linewidth=line_width, label=f"{label}: {value}")
+
+    # Fill the area below the best-fit line with blue color
+    ax.fill_between(x_fit, y_fit, color='blue', alpha=0.2, label="Area Below Best-Fit Line")
+
+    # Plot the min-max range area
+    min_value = value_pairs["Min"]
+    max_value = value_pairs["Max"]
+    ax.fill_betweenx(y=[ax.get_ylim()[0], ax.get_ylim()[1]], x1=min_value, x2=max_value, color='#f4d35e', alpha=0.5, label="Min-Max Range")
+
+    # Customize the chart
+    ax.set_xlabel(title)
+    ax.set_ylabel("Count")
+    ax.set_title(title + " Distribution")
+
+    # Add a legend
+    ax.legend()
+
+    return fig
 def multiply_and_convert_to_json(input_df):
     # Create a copy of the input DataFrame
     modified_df = input_df.copy()
@@ -235,6 +289,15 @@ with st.expander("", expanded=True):
     NPM_CHART_placeholder = st.empty()
 
   st.markdown('***')
+  col11, col12, col13 = st.columns([1,1,1])
+  with col11:
+    RG_CHART_bf_placeholder = st.empty()
+  with col12:
+    GM_CHART_bf_placeholder = st.empty()
+  with col13:
+    NPM_CHART_bf_placeholder = st.empty()
+
+  st.markdown('***')
   col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
   with col1:
     DCNumberOfSimulations_placeholder = st.empty()
@@ -263,6 +326,8 @@ with st.expander("", expanded=True):
     }
     chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
     RG_CHART_placeholder.pyplot(chart_fig)
+    chart_fig = generate_comb_chart_best_fit(data_rg, value_pairs_rg, "Revenue Growth")
+    RG_CHART_bf_placeholder.pyplot(chart_fig)
 
     data_gm = pd.DataFrame(DCoutputs["gm_htable"])
     value_pairs_gm = {
@@ -272,6 +337,8 @@ with st.expander("", expanded=True):
     }
     chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
     GM_CHART_placeholder.pyplot(chart_fig)
+    chart_fig = generate_comb_chart_best_fit(data_gm, value_pairs_gm, "Gross Margin")
+    GM_CHART_bf_placeholder.pyplot(chart_fig)
 
     data_npm = pd.DataFrame(DCoutputs["npm_htable"])
     value_pairs_npm = {
@@ -281,6 +348,8 @@ with st.expander("", expanded=True):
     }
     chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
     NPM_CHART_placeholder.pyplot(chart_fig)
+    chart_fig = generate_comb_chart_best_fit(data_npm, value_pairs_npm, "Net Profit Margin")
+    NPM_CHART_bf_placeholder.pyplot(chart_fig)
 
     DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
     DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
