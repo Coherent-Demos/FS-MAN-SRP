@@ -39,6 +39,8 @@ def definedCombination(inputdata):
       DCloading.success("API call successful")
     return response
 
+
+
 def generate_bar_chart(fig, data_df, config):
     for column in data_df.columns:
         if column != config['x_column']:
@@ -62,7 +64,7 @@ def generate_comb_chart(data, value_pairs, title):
     df = pd.DataFrame(data)
 
     # Set the font family
-    plt.rcParams["font.family"] = ["Source Sans Pro", "Arial"]
+    plt.rcParams["font.family"] = ["Arial"]
 
     # Create a bar chart using Matplotlib
     fig, ax = plt.subplots()
@@ -124,8 +126,8 @@ json_data = [
     "Inputs": "KFC - SSSG (%)",
     "Historical 1 sd": 0.0142,
     "2023 Point assumption": 0.05,
-    "2023 Min": -0.0042,
-    "2023 Max": 0.0242,
+    "2023 Min": 0.0358,
+    "2023 Max": 0.0642,
     "2024 Point assumption": 0.01,
     "2024 Min": -0.0042,
     "2024 Max": 0.0242
@@ -144,16 +146,22 @@ json_data = [
     "Inputs": "Pizza Hut - SSSG (%)",
     "Historical 1 sd": 0.0177,
     "2023 Point assumption": 0.07,
-    "2023 Min": 0.0023,
-    "2023 Max": 0.0377,
+    "2023 Min": 0.0523,
+    "2023 Max": 0.0877,
     "2024 Point assumption": 0.02,
     "2024 Min": 0.0023,
     "2024 Max": 0.0377
   }
 ]
 
+DCoutputs = {"Simualtions":6561,"rg_htable":[{"Historical":-23,"Count":0},{"Historical":-20,"Count":1},{"Historical":-17,"Count":0},{"Historical":-14,"Count":1},{"Historical":-11,"Count":2},{"Historical":-8,"Count":1},{"Historical":-5,"Count":3},{"Historical":-2,"Count":3},{"Historical":1,"Count":9},{"Historical":4,"Count":7},{"Historical":7,"Count":1},{"Historical":10,"Count":2},{"Historical":13,"Count":4},{"Historical":16,"Count":0},{"Historical":19,"Count":0},{"Historical":22,"Count":0},{"Historical":25,"Count":0},{"Historical":28,"Count":2},{"Historical":31,"Count":0},{"Historical":34,"Count":1},{"Historical":37,"Count":0},{"Historical":40,"Count":0},{"Historical":43,"Count":1},{"Historical":46,"Count":0}],"npm_htable":[{"Historical":-5,"Count":0},{"Historical":-4,"Count":0},{"Historical":-3,"Count":0},{"Historical":-2,"Count":1},{"Historical":-1,"Count":1},{"Historical":0,"Count":0},{"Historical":1,"Count":1},{"Historical":2,"Count":0},{"Historical":3,"Count":4},{"Historical":4,"Count":6},{"Historical":5,"Count":1},{"Historical":6,"Count":4},{"Historical":7,"Count":2},{"Historical":8,"Count":5},{"Historical":9,"Count":7},{"Historical":10,"Count":3},{"Historical":11,"Count":1},{"Historical":12,"Count":1},{"Historical":13,"Count":0},{"Historical":14,"Count":0},{"Historical":15,"Count":0},{"Historical":16,"Count":0},{"Historical":17,"Count":0},{"Historical":18,"Count":1},{"Historical":19,"Count":0},{"Historical":20,"Count":0}],"Avg_Target_Price":65.9358329522939,"Avg_Profit_before_Tax":1234.48363123162,"Avg_Revenue_growth":22.3180426153235,"Avg_Revenue":11704.6134978605,"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":22.3180426153223,"Net Profit Margin":7.31448737395571,"Gross Margin":70.1100673500095},{"Metric":"Min (Simulation)","Revenue Growth":20.4222890641395,"Net Profit Margin":8.74377992124965,"Gross Margin":64.1633419557201},{"Metric":"Max (Simulation)","Revenue Growth":24.2137961665051,"Net Profit Margin":8.79453121893399,"Gross Margin":76.0498405626466}],"gm_htable":[{"Historical":65,"Count":1},{"Historical":66,"Count":1},{"Historical":67,"Count":1},{"Historical":68,"Count":6},{"Historical":69,"Count":1},{"Historical":70,"Count":12},{"Historical":71,"Count":17},{"Historical":72,"Count":11},{"Historical":73,"Count":6},{"Historical":74,"Count":2},{"Historical":75,"Count":0}],"Avg_COGS":-3498.5010914521,"Avg_Net_profit_margin":8.76949725186518,"Avg_Gross_Margin":70.110182486921}
+DCerrors = []
+
 st.write("Edit Min and Max Values")
 with st.form("DC Form"):
+  Go = True
+  ERRORBOX = st.empty()
+  DCLoading = st.empty()
   def highlight_col(x):
     r = 'background-color: #fafafa; color: #a0a0a0'
     df1 = pd.DataFrame('', index=x.index, columns=x.columns)
@@ -183,12 +191,22 @@ with st.form("DC Form"):
   )
 
   DCbutton_clicked = st.form_submit_button("Generate Output")
-
-  if DCbutton_clicked:
+  if DCbutton_clicked:   
+    for index, row in inputTable.iterrows():
+        if row["2023 Min"] > row["2023 Max"] or row["2024 Min"] > row["2024 Max"]:
+          APIGO = False
+          break
+        else:
+          APIGO = True
+    if True:      
+    # if APIGO==True:
       apiInput = multiply_and_convert_to_json(inputTable)
       apiInput_dict = json.loads(apiInput)
       DCalldata = definedCombination(apiInput_dict)
       DCoutputs = DCalldata.json()['response_data']['outputs']
+      DCerrors = DCalldata.json()['response_data']['errors']
+    else:
+      ERRORBOX.error("Min must be greater than Max")
 
   # Add the style tag to change button color to blue
   st.markdown("""
@@ -203,10 +221,10 @@ with st.form("DC Form"):
 
 st.write("Simulation Results")
 with st.expander("", expanded=True):
-  apiInput = multiply_and_convert_to_json(inputTable)
-  apiInput_dict = json.loads(apiInput)
-  DCalldata = definedCombination(apiInput_dict)
-  DCoutputs = DCalldata.json()['response_data']['outputs']
+  # apiInput = multiply_and_convert_to_json(inputTable)
+  # apiInput_dict = json.loads(apiInput)
+  # DCalldata = definedCombination(apiInput_dict)
+  # DCoutputs = DCalldata.json()['response_data']['outputs']
 
   col11, col12, col13 = st.columns([1,1,1])
   with col11:
@@ -219,20 +237,15 @@ with st.expander("", expanded=True):
   st.markdown('***')
   col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
   with col1:
-    DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
-    st.metric(label='Number of Simulations', value=DCNumberOfSimulations)
+    DCNumberOfSimulations_placeholder = st.empty()
   with col2:
-    DCAvgCost = "{:,.2f}".format(DCoutputs["Avg_COGS"])
-    st.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
+    DCAvgCost_placeholder = st.empty()
   with col3:  
-    DCAvgProfit = "{:,.2f}".format(DCoutputs["Avg_Profit_before_Tax"])
-    st.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
+    DCAvgProfit_placeholder = st.empty()
   with col4:  
-    DCAvgRevenue = "{:,.2f}".format(DCoutputs["Avg_Revenue"])
-    st.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
+    DCAvgRevenue_placeholder = st.empty()
   with col5:  
-    DCAvgTargetPrice = "{:,.2f}".format(DCoutputs["Avg_Target_Price"])
-    st.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
+    DCAvgTargetPrice_placeholder = st.empty()
 
   # col31, col32 = st.columns([1,1])
   # with col31:
@@ -241,30 +254,51 @@ with st.expander("", expanded=True):
   #   st.json(DCoutputs) 
 
   #generate line chart of results
-  data_rg = pd.DataFrame(DCoutputs["rg_htable"])
-  value_pairs_rg = {
-    "Min": DCoutputs["minmaxtable"][1]["Revenue Growth"],
-    "Max": DCoutputs["minmaxtable"][2]["Revenue Growth"],
-    "Analyst Prediction": DCoutputs["minmaxtable"][0]["Revenue Growth"]
-  }
-  chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
-  RG_CHART_placeholder.pyplot(chart_fig)
+  if not DCerrors:
+    data_rg = pd.DataFrame(DCoutputs["rg_htable"])
+    value_pairs_rg = {
+      "Min": DCoutputs["minmaxtable"][1]["Revenue Growth"],
+      "Max": DCoutputs["minmaxtable"][2]["Revenue Growth"],
+      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Revenue Growth"]
+    }
+    chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
+    RG_CHART_placeholder.pyplot(chart_fig)
 
-  data_gm = pd.DataFrame(DCoutputs["gm_htable"])
-  value_pairs_gm = {
-    "Min": DCoutputs["minmaxtable"][1]["Gross Margin"],
-    "Max": DCoutputs["minmaxtable"][2]["Gross Margin"],
-    "Analyst Prediction": DCoutputs["minmaxtable"][0]["Gross Margin"]
-  }
-  chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
-  GM_CHART_placeholder.pyplot(chart_fig)
+    data_gm = pd.DataFrame(DCoutputs["gm_htable"])
+    value_pairs_gm = {
+      "Min": DCoutputs["minmaxtable"][1]["Gross Margin"],
+      "Max": DCoutputs["minmaxtable"][2]["Gross Margin"],
+      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Gross Margin"]
+    }
+    chart_fig = generate_comb_chart(data_gm, value_pairs_gm, "Gross Margin")
+    GM_CHART_placeholder.pyplot(chart_fig)
 
-  data_npm = pd.DataFrame(DCoutputs["npm_htable"])
-  value_pairs_npm = {
-    "Min": DCoutputs["minmaxtable"][1]["Net Profit Margin"],
-    "Max": DCoutputs["minmaxtable"][2]["Net Profit Margin"],
-    "Analyst Prediction": DCoutputs["minmaxtable"][0]["Net Profit Margin"]
-  }
-  chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
-  NPM_CHART_placeholder.pyplot(chart_fig)
+    data_npm = pd.DataFrame(DCoutputs["npm_htable"])
+    value_pairs_npm = {
+      "Min": DCoutputs["minmaxtable"][1]["Net Profit Margin"],
+      "Max": DCoutputs["minmaxtable"][2]["Net Profit Margin"],
+      "Analyst Prediction": DCoutputs["minmaxtable"][0]["Net Profit Margin"]
+    }
+    chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
+    NPM_CHART_placeholder.pyplot(chart_fig)
 
+    DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
+    DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
+
+    DCAvgCost = "{:,.2f}".format(DCoutputs["Avg_COGS"])
+    DCAvgCost_placeholder.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
+
+    DCAvgProfit = "{:,.2f}".format(DCoutputs["Avg_Profit_before_Tax"])
+    DCAvgProfit_placeholder.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
+
+    DCAvgRevenue = "{:,.2f}".format(DCoutputs["Avg_Revenue"])
+    DCAvgRevenue_placeholder.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
+
+    DCAvgTargetPrice = "{:,.2f}".format(DCoutputs["Avg_Target_Price"])
+    DCAvgTargetPrice_placeholder.metric(label='Avg Target Price ($)', value=DCAvgTargetPrice)
+
+    initState = False
+  else:
+    error_messages = [error["message"] for error in DCerrors]
+    if error_messages:
+        ERRORBOX.error("\n ".join(error_messages))
