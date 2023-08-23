@@ -65,9 +65,6 @@ def generate_comb_chart(data, value_pairs, title):
     # Create a DataFrame
     df = pd.DataFrame(data)
 
-    # Set the font family
-    plt.rcParams["font.family"] = ["helvetica"]
-
     # Create a bar chart using Matplotlib
     fig, ax = plt.subplots()
     ax.bar(df["Historical"], df["Count"], color='#020887', label="Original Data")
