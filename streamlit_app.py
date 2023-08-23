@@ -66,7 +66,7 @@ def generate_comb_chart(data, value_pairs, title):
     df = pd.DataFrame(data)
 
     # Set the font family
-    plt.rcParams["font.family"] = ["Arial"]
+    plt.rcParams["font.family"] = ["helvetica"]
 
     # Create a bar chart using Matplotlib
     fig, ax = plt.subplots()
@@ -234,8 +234,8 @@ with st.form("DC Form"):
     column_config={
       "Inputs": st.column_config.Column(disabled=True),
       "Historical 1 sd": st.column_config.Column("Historical (1SD)", disabled=True),
-      "2023 Point assumption": st.column_config.Column("2023 Point assumption %", disabled=True),
-      "2024 Point assumption": st.column_config.Column("2024 Point assumption %", disabled=True),
+      "2023 Point assumption": st.column_config.Column("2023 CLSA Analyst Assumption (%)", disabled=True),
+      "2024 Point assumption": st.column_config.Column("2024 CLSA Analyst Assumption (%)", disabled=True),
       "2023 Min": st.column_config.Column("2023 Min (%)"),
       "2023 Max": st.column_config.Column("2023 Max (%)"),
       "2024 Min": st.column_config.Column("2024 Min (%)"),
