@@ -29,15 +29,15 @@ def definedCombination(inputdata):
             "compiler_type": "Neuron",
         }
     })
-    
-    # url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3A/Execute"
+
+    # url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3B/Execute"
     # headers = {
     #    'Content-Type': 'application/json',
     #    'x-tenant-name': 'clsa',
     #    'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
     # }
 
-    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/Xcall Yum China - Defined Comb - output template3A/Execute"
+    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/Xcall Yum China - Defined Comb - output template3B/Execute"
     headers = {
        'Content-Type': 'application/json',
        'x-tenant-name': 'coherent',
