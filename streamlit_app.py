@@ -17,8 +17,7 @@ st.set_page_config(layout="wide")
 @st.cache_data
 def definedCombination(inputdata):
     if 'DCloading' in st.session_state:
-      DCloading.warning("Running Simulations")
-    url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3A/Execute"
+      DCloading.warning("Running Simulations")    
 
     payload = json.dumps({
        "request_data": {
@@ -30,10 +29,19 @@ def definedCombination(inputdata):
             "compiler_type": "Neuron",
         }
     })
+    
+    # url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3A/Execute"
+    # headers = {
+    #    'Content-Type': 'application/json',
+    #    'x-tenant-name': 'clsa',
+    #    'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
+    # }
+
+    url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/Xcall Yum China - Defined Comb - output template3A/Execute"
     headers = {
        'Content-Type': 'application/json',
-       'x-tenant-name': 'clsa',
-       'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
+       'x-tenant-name': 'coherent',
+       'SecretKey': '2277565c-9fad-4bf4-ad2b-1efe5748dd11'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload, allow_redirects=False)
@@ -205,7 +213,7 @@ json_data = [
   }
 ]
 
-DCoutputs = {"TM_htable":[{"Historical":16,"Count":11},{"Historical":18,"Count":86},{"Historical":20,"Count":138},{"Historical":22,"Count":349},{"Historical":24,"Count":342},{"Historical":26,"Count":151},{"Historical":28,"Count":270},{"Historical":30,"Count":213},{"Historical":32,"Count":91},{"Historical":34,"Count":13},{"Historical":36,"Count":26},{"Historical":38,"Count":11},{"Historical":40,"Count":11},{"Historical":42,"Count":8},{"Historical":44,"Count":0}],"Simualtions":6561,"rg_htable":[{"Historical":-23,"Count":0},{"Historical":-20,"Count":1},{"Historical":-17,"Count":0},{"Historical":-14,"Count":1},{"Historical":-11,"Count":2},{"Historical":-8,"Count":1},{"Historical":-5,"Count":3},{"Historical":-2,"Count":3},{"Historical":1,"Count":9},{"Historical":4,"Count":7},{"Historical":7,"Count":1},{"Historical":10,"Count":2},{"Historical":13,"Count":4},{"Historical":16,"Count":0},{"Historical":19,"Count":0},{"Historical":22,"Count":0},{"Historical":25,"Count":0},{"Historical":28,"Count":2},{"Historical":31,"Count":0},{"Historical":34,"Count":1},{"Historical":37,"Count":0},{"Historical":40,"Count":0},{"Historical":43,"Count":1},{"Historical":46,"Count":0}],"npm_htable":[{"Historical":-5,"Count":0},{"Historical":-4,"Count":0},{"Historical":-3,"Count":0},{"Historical":-2,"Count":1},{"Historical":-1,"Count":1},{"Historical":0,"Count":0},{"Historical":1,"Count":1},{"Historical":2,"Count":0},{"Historical":3,"Count":4},{"Historical":4,"Count":6},{"Historical":5,"Count":1},{"Historical":6,"Count":4},{"Historical":7,"Count":2},{"Historical":8,"Count":5},{"Historical":9,"Count":7},{"Historical":10,"Count":3},{"Historical":11,"Count":1},{"Historical":12,"Count":1},{"Historical":13,"Count":0},{"Historical":14,"Count":0},{"Historical":15,"Count":0},{"Historical":16,"Count":0},{"Historical":17,"Count":0},{"Historical":18,"Count":1},{"Historical":19,"Count":0},{"Historical":20,"Count":0}],"Avg_Profit_before_Tax":1234.48363123162,"Avg_Revenue_growth":22.3180426153235,"Avg_Revenue":11704.6134978605,"Targetprice_upside":0.246622656894583,"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":22.3180426153223,"Net Profit Margin":7.31448737395571,"Gross Margin":70.1100673500095,"Target multiple":28,"Target Price upside":24.4343891402715},{"Metric":"Min (Simulation)","Revenue Growth":20.4222890641395,"Net Profit Margin":3.18964054144646,"Gross Margin":64.1633419557201,"Target multiple":28,"Target Price upside":-0.41553544494721},{"Metric":"Max (Simulation)","Revenue Growth":24.2137961665051,"Net Profit Margin":11.4404619705489,"Gross Margin":76.0498405626466,"Target multiple":28,"Target Price upside":0.941930618401207}],"gm_htable":[{"Historical":65,"Count":1},{"Historical":66,"Count":1},{"Historical":67,"Count":1},{"Historical":68,"Count":6},{"Historical":69,"Count":1},{"Historical":70,"Count":12},{"Historical":71,"Count":17},{"Historical":72,"Count":11},{"Historical":73,"Count":6},{"Historical":74,"Count":2},{"Historical":75,"Count":0}],"Avg_COGS":-3498.5010914521,"TPU_htable":[{"Historical":-44,"Count":46},{"Historical":-32,"Count":135},{"Historical":-20,"Count":172},{"Historical":-8,"Count":168},{"Historical":4,"Count":241},{"Historical":16,"Count":293},{"Historical":28,"Count":188},{"Historical":40,"Count":119},{"Historical":52,"Count":81},{"Historical":64,"Count":20},{"Historical":76,"Count":6},{"Historical":88,"Count":0}],"Avg_Net_profit_margin":7.31451188955846,"Avg_Target_Multiple":28,"Avg_Gross_Margin":70.110182486921}
+DCoutputs = {"TM_htable":[{"Historical":16,"Count":11},{"Historical":18,"Count":86},{"Historical":20,"Count":138},{"Historical":22,"Count":349},{"Historical":24,"Count":342},{"Historical":26,"Count":151},{"Historical":28,"Count":270},{"Historical":30,"Count":213},{"Historical":32,"Count":91},{"Historical":34,"Count":13},{"Historical":36,"Count":26},{"Historical":38,"Count":11},{"Historical":40,"Count":11},{"Historical":42,"Count":8},{"Historical":44,"Count":0}],"Simualtions":6561,"rg_htable":[{"Historical":-23,"Count":0},{"Historical":-20,"Count":1},{"Historical":-17,"Count":0},{"Historical":-14,"Count":1},{"Historical":-11,"Count":2},{"Historical":-8,"Count":1},{"Historical":-5,"Count":3},{"Historical":-2,"Count":3},{"Historical":1,"Count":9},{"Historical":4,"Count":7},{"Historical":7,"Count":1},{"Historical":10,"Count":2},{"Historical":13,"Count":4},{"Historical":16,"Count":0},{"Historical":19,"Count":0},{"Historical":22,"Count":0},{"Historical":25,"Count":0},{"Historical":28,"Count":2},{"Historical":31,"Count":0},{"Historical":34,"Count":1},{"Historical":37,"Count":0},{"Historical":40,"Count":0},{"Historical":43,"Count":1},{"Historical":46,"Count":0}],"npm_htable":[{"Historical":-5,"Count":0},{"Historical":-4,"Count":0},{"Historical":-3,"Count":0},{"Historical":-2,"Count":1},{"Historical":-1,"Count":1},{"Historical":0,"Count":0},{"Historical":1,"Count":1},{"Historical":2,"Count":0},{"Historical":3,"Count":4},{"Historical":4,"Count":6},{"Historical":5,"Count":1},{"Historical":6,"Count":4},{"Historical":7,"Count":2},{"Historical":8,"Count":5},{"Historical":9,"Count":7},{"Historical":10,"Count":3},{"Historical":11,"Count":1},{"Historical":12,"Count":1},{"Historical":13,"Count":0},{"Historical":14,"Count":0},{"Historical":15,"Count":0},{"Historical":16,"Count":0},{"Historical":17,"Count":0},{"Historical":18,"Count":1},{"Historical":19,"Count":0},{"Historical":20,"Count":0}],"Avg_Profit_before_Tax":1234.48363123162,"Avg_Revenue_growth":22.3180426153235,"Avg_Revenue":11704.6134978605,"Targetprice_upside":0.247315194704849,"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":22.3180426153223,"Net Profit Margin":7.31448737395571,"Gross Margin":70.1100673500095,"Target multiple":28,"Target Price upside":24.4343891402715},{"Metric":"Min (Simulation)","Revenue Growth":20.4222890641395,"Net Profit Margin":3.18964054144646,"Gross Margin":64.1633419557201,"Target multiple":28,"Target Price upside":-41.553544494721},{"Metric":"Max (Simulation)","Revenue Growth":24.2137961665051,"Net Profit Margin":11.4404619705489,"Gross Margin":76.0498405626466,"Target multiple":28,"Target Price upside":96.078431372549}],"gm_htable":[{"Historical":65,"Count":1},{"Historical":66,"Count":1},{"Historical":67,"Count":1},{"Historical":68,"Count":6},{"Historical":69,"Count":1},{"Historical":70,"Count":12},{"Historical":71,"Count":17},{"Historical":72,"Count":11},{"Historical":73,"Count":6},{"Historical":74,"Count":2},{"Historical":75,"Count":0}],"Avg_COGS":-3498.5010914521,"TPU_htable":[{"Historical":-44,"Count":46},{"Historical":-32,"Count":135},{"Historical":-20,"Count":172},{"Historical":-8,"Count":168},{"Historical":4,"Count":241},{"Historical":16,"Count":293},{"Historical":28,"Count":188},{"Historical":40,"Count":119},{"Historical":52,"Count":81},{"Historical":64,"Count":20},{"Historical":76,"Count":6},{"Historical":88,"Count":0}],"Avg_Net_profit_margin":7.31451188955846,"Avg_Target_Multiple":28,"Avg_Gross_Margin":70.110182486921}
 DCerrors = []
 
 st.write("Edit Min and Max Values")
@@ -327,9 +335,7 @@ with st.expander("", expanded=True):
     DCADD_placeholder = st.empty()
 
   st.markdown('***')
-  col31, col32, col33, col34 = st.columns([1,1,1,1])
-  with col31:
-    DCNumberOfSimulations_placeholder = st.empty()
+  col32, col33, col34 = st.columns([1,1,1])
   with col32:
     DCAvgCost_placeholder = st.empty()
   with col33:  
@@ -386,19 +392,19 @@ with st.expander("", expanded=True):
 
     # Chart value averages 
     DCRG_Avg = "{:,.2f}".format(DCoutputs["Avg_Revenue_growth"])
-    DCRG_Avg_placeholder.info("**Avg Revenue Growth**: " + DCRG_Avg + " *(6561 Simulations)*")
+    DCRG_Avg_placeholder.info("**Avg Revenue Growth**: " + DCRG_Avg)
     DCGM_Avg = "{:,.2f}".format(DCoutputs["Avg_Gross_Margin"])
-    DCGM_Avg_placeholder.info("**Avg Gross Margin**: " + DCGM_Avg + " *(6561 Simulations)*")
+    DCGM_Avg_placeholder.info("**Avg Gross Margin**: " + DCGM_Avg)
     DCNPM_Avg = "{:,.2f}".format(DCoutputs["Avg_Net_profit_margin"])
-    DCNPM_Avg_placeholder.info("**Avg Net Profit Margin**: " + DCNPM_Avg + " *(6561 Simulations)*")
+    DCNPM_Avg_placeholder.info("**Avg Net Profit Margin**: " + DCNPM_Avg)
 
     DCTM_Avg = "{:,.2f}".format(DCoutputs["Avg_Target_Multiple"])
-    DCTM_Avg_placeholder.info("**Avg Target Multiple**: " + DCTM_Avg + " *(6561 Simulations)*")
+    DCTM_Avg_placeholder.info("**Avg Target Multiple**: " + DCTM_Avg)
     DCTPU_Avg = "{:,.2f}".format(DCoutputs["Targetprice_upside"])
-    DCTPU_Avg_placeholder.info("**Avg TPU**: " + DCTPU_Avg + " *(6561 Simulations)*")
+    DCTPU_Avg_placeholder.info("**Avg TPU**: " + DCTPU_Avg)
 
-    DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
-    DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
+    # DCNumberOfSimulations = "{:,.0f}".format(DCoutputs["Simualtions"])
+    # DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
     DCAvgCost = "{:,.2f}".format(DCoutputs["Avg_COGS"])
     DCAvgCost_placeholder.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
     DCAvgProfit = "{:,.2f}".format(DCoutputs["Avg_Profit_before_Tax"])
