@@ -162,8 +162,8 @@ def multiply_and_convert_to_json(input_df):
     return json_data
 
 #Start of UI
-image_path = "coherent-logo.png"
-st.image(image_path, caption="", width=32)
+image_path = "coherent-clsa-logo.png"
+st.image(image_path, caption="")
 
 st.write("## Pricing Simulation")
 st.text("‎") 
