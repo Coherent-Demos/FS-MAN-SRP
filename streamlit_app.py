@@ -30,19 +30,19 @@ def definedCombination(inputdata):
         }
     })
 
-    # url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3A/Execute"
-    # headers = {
-    #    'Content-Type': 'application/json',
-    #    'x-tenant-name': 'clsa',
-    #    'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
-    # }
-
-    url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3B/Execute"
+    url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3A/Execute"
     headers = {
        'Content-Type': 'application/json',
        'x-tenant-name': 'clsa',
        'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
     }
+
+    # url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Trial/services/Xcall Yum China - Defined Comb - output template3B/Execute"
+    # headers = {
+    #    'Content-Type': 'application/json',
+    #    'x-tenant-name': 'clsa',
+    #    'x-synthetic-key': '3ca9da18-31fa-4a82-a9ba-44130dff5c6a'
+    # }
 
     # url = "https://excel.uat.us.coherent.global/coherent/api/v3/folders/Spark FE Demos/services/Xcall Yum China - Defined Comb - output template3B/Execute"
     # headers = {
@@ -227,8 +227,8 @@ DCoutputs = {"TM_htable":[{"Historical":16,"Count":11},{"Historical":18,"Count":
 DCerrors = []
 
 with st.expander("Spark Model", expanded=True):
-  # st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3A/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3A/apiTester/test)')
-  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test)')
+  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3A/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3A/apiTester/test)')
+  # st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test)')
 
 st.write("Edit Min and Max Values")
 with st.form("DC Form"):
