@@ -80,9 +80,12 @@ def generate_comb_chart(data, value_pairs, title):
     # Create a DataFrame
     df = pd.DataFrame(data)
 
-    # Create a bar chart using Matplotlib
+    # Calculate the bar width based on the data
+    bar_width = (df["Historical"].max() - df["Historical"].min()) / len(df)
+
+    # Create a bar chart using Matplotlib with uniform bar widths
     fig, ax = plt.subplots()
-    ax.bar(df["Historical"], df["Count"], color='#020887', label="Original Data")
+    ax.bar(df["Historical"], df["Count"], width=bar_width, align='center', color='#020887', label="Original Data")
 
     min_value = value_pairs["Min"]
     max_value = value_pairs["Max"]
