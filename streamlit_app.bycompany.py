@@ -230,12 +230,12 @@ json_data = [
 ]
 
 # Spark_outputs = {"TM_htable":[{"Historical":16,"Count":11},{"Historical":18,"Count":86},{"Historical":20,"Count":138},{"Historical":22,"Count":349},{"Historical":24,"Count":342},{"Historical":26,"Count":151},{"Historical":28,"Count":270},{"Historical":30,"Count":213},{"Historical":32,"Count":91},{"Historical":34,"Count":13},{"Historical":36,"Count":26},{"Historical":38,"Count":11},{"Historical":40,"Count":11},{"Historical":42,"Count":8},{"Historical":44,"Count":0}],"Simualtions":6561,"rg_htable":[{"Historical":-23,"Count":0},{"Historical":-20,"Count":1},{"Historical":-17,"Count":0},{"Historical":-14,"Count":1},{"Historical":-11,"Count":2},{"Historical":-8,"Count":1},{"Historical":-5,"Count":3},{"Historical":-2,"Count":3},{"Historical":1,"Count":9},{"Historical":4,"Count":7},{"Historical":7,"Count":1},{"Historical":10,"Count":2},{"Historical":13,"Count":4},{"Historical":16,"Count":0},{"Historical":19,"Count":0},{"Historical":22,"Count":0},{"Historical":25,"Count":0},{"Historical":28,"Count":2},{"Historical":31,"Count":0},{"Historical":34,"Count":1},{"Historical":37,"Count":0},{"Historical":40,"Count":0},{"Historical":43,"Count":1},{"Historical":46,"Count":0}],"npm_htable":[{"Historical":-5,"Count":0},{"Historical":-4,"Count":0},{"Historical":-3,"Count":0},{"Historical":-2,"Count":1},{"Historical":-1,"Count":1},{"Historical":0,"Count":0},{"Historical":1,"Count":1},{"Historical":2,"Count":0},{"Historical":3,"Count":4},{"Historical":4,"Count":6},{"Historical":5,"Count":1},{"Historical":6,"Count":4},{"Historical":7,"Count":2},{"Historical":8,"Count":5},{"Historical":9,"Count":7},{"Historical":10,"Count":3},{"Historical":11,"Count":1},{"Historical":12,"Count":1},{"Historical":13,"Count":0},{"Historical":14,"Count":0},{"Historical":15,"Count":0},{"Historical":16,"Count":0},{"Historical":17,"Count":0},{"Historical":18,"Count":1},{"Historical":19,"Count":0},{"Historical":20,"Count":0}],"Avg_Profit_before_Tax":1234.48363123162,"Avg_Revenue_growth":22.3180426153235,"Avg_Revenue":11704.6134978605,"Targetprice_upside":0.247315194704849,"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":22.3180426153223,"Net Profit Margin":7.31448737395571,"Gross Margin":70.1100673500095,"Target multiple":28,"Target Price upside":24.4343891402715},{"Metric":"Min (Simulation)","Revenue Growth":20.4222890641395,"Net Profit Margin":3.18964054144646,"Gross Margin":64.1633419557201,"Target multiple":28,"Target Price upside":-41.553544494721},{"Metric":"Max (Simulation)","Revenue Growth":24.2137961665051,"Net Profit Margin":11.4404619705489,"Gross Margin":76.0498405626466,"Target multiple":28,"Target Price upside":96.078431372549}],"gm_htable":[{"Historical":65,"Count":1},{"Historical":66,"Count":1},{"Historical":67,"Count":1},{"Historical":68,"Count":6},{"Historical":69,"Count":1},{"Historical":70,"Count":12},{"Historical":71,"Count":17},{"Historical":72,"Count":11},{"Historical":73,"Count":6},{"Historical":74,"Count":2},{"Historical":75,"Count":0}],"Avg_COGS":-3498.5010914521,"TPU_htable":[{"Historical":-44,"Count":46},{"Historical":-32,"Count":135},{"Historical":-20,"Count":172},{"Historical":-8,"Count":168},{"Historical":4,"Count":241},{"Historical":16,"Count":293},{"Historical":28,"Count":188},{"Historical":40,"Count":119},{"Historical":52,"Count":81},{"Historical":64,"Count":20},{"Historical":76,"Count":6},{"Historical":88,"Count":0}],"Avg_Net_profit_margin":7.31451188955846,"Avg_Target_Multiple":28,"Avg_Gross_Margin":70.110182486921}
-Spark_outputs = {"response_data":{"outputs":{"gm_htable":[{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0}],"listOfOutputs":[{"DS OUTPUTS":"COGS"},{"DS OUTPUTS":"Gross_Margin"},{"DS OUTPUTS":"Net_profit_margin"},{"DS OUTPUTS":"profitbeforetax"},{"DS OUTPUTS":"revenue"},{"DS OUTPUTS":"Revenue_growth"},{"DS OUTPUTS":"target_multiple"},{"DS OUTPUTS":"targetprice"},{"DS OUTPUTS":"targetprice_upside"}],"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":350.540556197299,"Net Profit Margin":12.0240055813407,"Gross Margin":0,"Target multiple":16.8226055718116,"Target Price upside":91.2929594181175},{"Metric":"Min (Simulation)","Revenue Growth":-168785.246569999,"Net Profit Margin":-438.936369388989,"Gross Margin":-32432.8211868324,"Target multiple":27.184492712941,"Target Price upside":0},{"Metric":"Max (Simulation)","Revenue Growth":149444.938250861,"Net Profit Margin":609.115584430144,"Gross Margin":67855.2702741205,"Target multiple":28.7399601903593,"Target Price upside":0}],"npm_htable":[{"Historical":-110,"Count":0},{"Historical":-104,"Count":2},{"Historical":-98,"Count":1},{"Historical":-92,"Count":0},{"Historical":-86,"Count":0},{"Historical":-80,"Count":0},{"Historical":-74,"Count":0},{"Historical":-68,"Count":0},{"Historical":-62,"Count":0},{"Historical":-56,"Count":0},{"Historical":-50,"Count":0},{"Historical":-44,"Count":1},{"Historical":-38,"Count":0},{"Historical":-32,"Count":2},{"Historical":-26,"Count":0},{"Historical":-20,"Count":0},{"Historical":-14,"Count":0},{"Historical":-8,"Count":2},{"Historical":-2,"Count":1},{"Historical":4,"Count":5},{"Historical":10,"Count":8},{"Historical":16,"Count":13},{"Historical":22,"Count":5},{"Historical":28,"Count":0},{"Historical":34,"Count":0},{"Historical":40,"Count":0}],"rg_htable":[{"Historical":-79,"Count":1},{"Historical":-58,"Count":1},{"Historical":-37,"Count":3},{"Historical":-16,"Count":11},{"Historical":5,"Count":17},{"Historical":26,"Count":1},{"Historical":47,"Count":2},{"Historical":68,"Count":2},{"Historical":89,"Count":0},{"Historical":110,"Count":0},{"Historical":131,"Count":0},{"Historical":152,"Count":0},{"Historical":173,"Count":0},{"Historical":194,"Count":0},{"Historical":215,"Count":0},{"Historical":236,"Count":0},{"Historical":257,"Count":0},{"Historical":278,"Count":0},{"Historical":299,"Count":0},{"Historical":320,"Count":0},{"Historical":341,"Count":1},{"Historical":362,"Count":0},{"Historical":383,"Count":0},{"Historical":404,"Count":0}],"Simualtions":256,"TM_htable":[{"Historical":8,"Count":997},{"Historical":62,"Count":17},{"Historical":116,"Count":18},{"Historical":170,"Count":0},{"Historical":224,"Count":0},{"Historical":278,"Count":0},{"Historical":332,"Count":0},{"Historical":386,"Count":0},{"Historical":440,"Count":2},{"Historical":494,"Count":1},{"Historical":548,"Count":2},{"Historical":602,"Count":0},{"Historical":656,"Count":0},{"Historical":710,"Count":0},{"Historical":764,"Count":0}],"TPU_htable":[{"Historical":-58,"Count":275},{"Historical":-37,"Count":181},{"Historical":-16,"Count":106},{"Historical":5,"Count":132},{"Historical":26,"Count":286},{"Historical":47,"Count":230},{"Historical":68,"Count":118},{"Historical":89,"Count":78},{"Historical":110,"Count":48},{"Historical":131,"Count":14},{"Historical":152,"Count":1},{"Historical":173,"Count":0}],"COGS":-7498.04230986393,"Gross Margin":-26.5211597935216,"Net Margin":-63.3687284735114,"Profit bf Tax":-345.873183328916,"Revenue":17711.224543644,"Revenue Growth":85.0896075205776,"Target Multilple":27.9991591091745,"Target Price":55.859375,"Target Price (Upside)":0.0531556372549198}},"response_meta":{"service_id":"f1acc855-5d03-4444-8132-d61bea9a2880","version_id":"ce62e4bc-5050-4384-94f7-8e917e08ba8d","version":"0.17.0","process_time":543,"call_id":"9aaef1d3-808f-43ae-b2b4-3883c60124c3","compiler_type":"Neuron","compiler_version":"1.16.0","engine_id":"A57FE9E714105A4C82CA67DF824CA747","correlation_id":"","system":"SPARK","request_timestamp":"2024-03-15T04:50:24.225Z"}}
+Spark_outputs = {"gm_htable":[{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0},{"Historical":0,"Count":0}],"listOfOutputs":[{"DS OUTPUTS":"COGS"},{"DS OUTPUTS":"Gross_Margin"},{"DS OUTPUTS":"Net_profit_margin"},{"DS OUTPUTS":"profitbeforetax"},{"DS OUTPUTS":"revenue"},{"DS OUTPUTS":"Revenue_growth"},{"DS OUTPUTS":"target_multiple"},{"DS OUTPUTS":"targetprice"},{"DS OUTPUTS":"targetprice_upside"}],"minmaxtable":[{"Metric":"Analys Prediction","Revenue Growth":350.540556197299,"Net Profit Margin":12.0240055813407,"Gross Margin":0,"Target multiple":16.8226055718116,"Target Price upside":91.2929594181175},{"Metric":"Min (Simulation)","Revenue Growth":-168785.246569999,"Net Profit Margin":-195750.126172926,"Gross Margin":-195750.126172926,"Target multiple":-1816.8112330525,"Target Price upside":-168785.246569999},{"Metric":"Max (Simulation)","Revenue Growth":149444.938250861,"Net Profit Margin":149444.938250861,"Gross Margin":149444.938250861,"Target multiple":1275.86504996688,"Target Price upside":149444.938250861}],"npm_htable":[{"Historical":-110,"Count":0},{"Historical":-104,"Count":2},{"Historical":-98,"Count":1},{"Historical":-92,"Count":0},{"Historical":-86,"Count":0},{"Historical":-80,"Count":0},{"Historical":-74,"Count":0},{"Historical":-68,"Count":0},{"Historical":-62,"Count":0},{"Historical":-56,"Count":0},{"Historical":-50,"Count":0},{"Historical":-44,"Count":1},{"Historical":-38,"Count":0},{"Historical":-32,"Count":2},{"Historical":-26,"Count":0},{"Historical":-20,"Count":0},{"Historical":-14,"Count":0},{"Historical":-8,"Count":2},{"Historical":-2,"Count":1},{"Historical":4,"Count":5},{"Historical":10,"Count":8},{"Historical":16,"Count":13},{"Historical":22,"Count":5},{"Historical":28,"Count":0},{"Historical":34,"Count":0},{"Historical":40,"Count":0}],"rg_htable":[{"Historical":-79,"Count":1},{"Historical":-58,"Count":1},{"Historical":-37,"Count":3},{"Historical":-16,"Count":11},{"Historical":5,"Count":17},{"Historical":26,"Count":1},{"Historical":47,"Count":2},{"Historical":68,"Count":2},{"Historical":89,"Count":0},{"Historical":110,"Count":0},{"Historical":131,"Count":0},{"Historical":152,"Count":0},{"Historical":173,"Count":0},{"Historical":194,"Count":0},{"Historical":215,"Count":0},{"Historical":236,"Count":0},{"Historical":257,"Count":0},{"Historical":278,"Count":0},{"Historical":299,"Count":0},{"Historical":320,"Count":0},{"Historical":341,"Count":1},{"Historical":362,"Count":0},{"Historical":383,"Count":0},{"Historical":404,"Count":0}],"Simualtions":256,"TM_htable":[{"Historical":8,"Count":997},{"Historical":62,"Count":17},{"Historical":116,"Count":18},{"Historical":170,"Count":0},{"Historical":224,"Count":0},{"Historical":278,"Count":0},{"Historical":332,"Count":0},{"Historical":386,"Count":0},{"Historical":440,"Count":2},{"Historical":494,"Count":1},{"Historical":548,"Count":2},{"Historical":602,"Count":0},{"Historical":656,"Count":0},{"Historical":710,"Count":0},{"Historical":764,"Count":0}],"TPU_htable":[{"Historical":-58,"Count":275},{"Historical":-37,"Count":181},{"Historical":-16,"Count":106},{"Historical":5,"Count":132},{"Historical":26,"Count":286},{"Historical":47,"Count":230},{"Historical":68,"Count":118},{"Historical":89,"Count":78},{"Historical":110,"Count":48},{"Historical":131,"Count":14},{"Historical":152,"Count":1},{"Historical":173,"Count":0}],"COGS":-7498.04230986393,"Gross Margin":-26.5211597935216,"Net Margin":-63.3687284735114,"Profit bf Tax":-345.873183328916,"Revenue":17711.224543644,"Revenue Growth":85.0896075205776,"Target Multilple":27.9991591091745,"Target Price":55.859375,"Target Price (Upside)":0.0531556372549198}
 DCerrors = []
 
 with st.expander("Spark Model", expanded=True):
   # st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Aggregate%20Output%20-%20v2/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Aggregate%20Output%20-%20v2/apiTester/test)')
-  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Trial/Xcall%20Yum%20China%20-%20Defined%20Comb%20-%20output%20template3B/apiTester/test)')
+  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test)')
 
 st.write("Select Parameters")
 with st.form("DC Form"):
@@ -324,7 +324,8 @@ with st.expander("", expanded=True):
   with col11:
     RG_CHART_placeholder = st.empty()
   with col12:
-    GM_CHART_placeholder = st.empty()
+    # GM_CHART_placeholder = st.empty()
+    TPU_CHART_placeholder = st.empty()
   with col13:
     NPM_CHART_placeholder = st.empty()
 
@@ -341,7 +342,8 @@ with st.expander("", expanded=True):
   with col21:
     DCRG_Avg_placeholder = st.empty()
   with col22:
-    DCGM_Avg_placeholder = st.empty()
+    # DCGM_Avg_placeholder = st.empty()
+    DCTPU_Avg_placeholder = st.empty()
   with col23:  
     DCNPM_Avg_placeholder = st.empty()
   st.markdown('***')
@@ -351,7 +353,8 @@ with st.expander("", expanded=True):
   with col14:
     TM_CHART_placeholder = st.empty()
   with col15:
-    TPU_CHART_placeholder = st.empty()
+    # TPU_CHART_placeholder = st.empty()
+    ADD_CHART2_placeholder = st.empty()
   with col16:
     ADD_CHART_placeholder = st.empty()
 
@@ -365,7 +368,8 @@ with st.expander("", expanded=True):
   with col24:
     DCTM_Avg_placeholder = st.empty()
   with col25:
-    DCTPU_Avg_placeholder = st.empty()
+    # DCTPU_Avg_placeholder = st.empty()
+    DCADD2_placeholder = st.empty()
   with col26:  
     DCADD_placeholder = st.empty()
 
@@ -430,26 +434,35 @@ with st.expander("", expanded=True):
     chart_fig = generate_comb_chart(data_tpu, value_pairs_tpu, "Target Price Upside")
     TPU_CHART_placeholder.pyplot(chart_fig)
 
+    # Function to format values safely
+    def safe_format(value):
+        try:
+            # If the value is zero or can be converted to a float, format it.
+            return "{:,.2f}".format(float(value))
+        except (TypeError, ValueError):
+            # If there is an error during formatting, return a default string
+            return "N/A"
+
     # Chart value averages 
-    DCRG_Avg = "{:,.2f}".format(Spark_outputs["Revenue Growth"])
-    DCRG_Avg_placeholder.info("**Avg Revenue Growth**: " + DCRG_Avg)
-    # DCGM_Avg = "{:,.2f}".format(Spark_outputs["Gross Margin"])
-    # DCGM_Avg_placeholder.info("**Avg Gross Margin**: " + DCGM_Avg)
-    DCNPM_Avg = "{:,.2f}".format(Spark_outputs["Net Margin"])
-    DCNPM_Avg_placeholder.info("**Avg Net Profit Margin**: " + DCNPM_Avg)
+    DCRG_Avg = safe_format(Spark_outputs.get("Revenue Growth", "N/A"))
+    DCRG_Avg_placeholder.info(f"**Avg Revenue Growth**: {DCRG_Avg}")
 
-    DCTM_Avg = "{:,.2f}".format(Spark_outputs["Target Multilple"])
-    DCTM_Avg_placeholder.info("**Avg Target Multiple**: " + DCTM_Avg)
-    DCTPU_Avg = "{:,.2f}".format(Spark_outputs["Target Price"])
-    DCTPU_Avg_placeholder.info("**Avg TPU**: " + DCTPU_Avg)
+    DCNPM_Avg = safe_format(Spark_outputs.get("Net Margin", "N/A"))
+    DCNPM_Avg_placeholder.info(f"**Avg Net Profit Margin**: {DCNPM_Avg}")
 
-    # DCNumberOfSimulations = "{:,.0f}".format(Spark_outputs["Simualtions"])
-    # DCNumberOfSimulations_placeholder.metric(label='Number of Simulations', value=DCNumberOfSimulations)
-    DCAvgCost = "{:,.2f}".format(Spark_outputs["COGS"])
+    DCTM_Avg = safe_format(Spark_outputs.get("Target Multiple", "N/A"))  # Fixed typo in "Multiple"
+    DCTM_Avg_placeholder.info(f"**Avg Target Multiple**: {DCTM_Avg}")
+
+    DCTPU_Avg = safe_format(Spark_outputs.get("Target Price", "N/A"))
+    DCTPU_Avg_placeholder.info(f"**Avg TPU**: {DCTPU_Avg}")
+
+    DCAvgCost = safe_format(Spark_outputs.get("COGS", "N/A"))
     DCAvgCost_placeholder.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
-    DCAvgProfit = "{:,.2f}".format(Spark_outputs["Profit bf Tax"])
+
+    DCAvgProfit = safe_format(Spark_outputs.get("Profit bf Tax", "N/A"))
     DCAvgProfit_placeholder.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
-    DCAvgRevenue = "{:,.2f}".format(Spark_outputs["Revenue"])
+
+    DCAvgRevenue = safe_format(Spark_outputs.get("Revenue", "N/A"))
     DCAvgRevenue_placeholder.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
 
     initState = False
