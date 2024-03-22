@@ -35,7 +35,7 @@ def definedCombination():
 
     # st.json(payload)
 
-    url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Original%20Models/services/Output%20Analysis%20-%20by%20Company/execute"
+    url = "https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Sector%20&%20Region/execute"
     headers = {
        'Content-Type': 'application/json',
        'x-tenant-name': 'clsa',
@@ -188,13 +188,13 @@ with st.form("DC Form"):
 
   col01, col02 = st.columns([1,1])
   with col01:
-    SectorOptions = ["Gaming", "Energy", "F&B"]
-    SectorInput = st.selectbox("Select a Sector", SectorOptions)
+    SectorOptions = ["ALL", "Gaming", "Energy", "F&B"]
+    SectorInput = st.selectbox("Sector", SectorOptions)
 
   with col02:
     # make an array with string all, china korea japan
     RegionOptions = ["ALL", "China", "Korea", "Japan"]
-    RegionInput = st.selectbox("Select a Region", RegionOptions)
+    RegionInput = st.selectbox("Region", RegionOptions)
 
   DCbutton_clicked = st.form_submit_button("Calculate")
   if DCbutton_clicked:   
