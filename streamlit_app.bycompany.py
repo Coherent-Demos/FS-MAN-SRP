@@ -228,7 +228,7 @@ DCerrors = []
 
 with st.expander("Spark Model", expanded=True):
   # st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Aggregate%20Output%20-%20v2/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Aggregate%20Output%20-%20v2/apiTester/test)')
-  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Original%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test)')
+  st.markdown('[https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute](https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute)')
 
 st.write("Select Parameters")
 with st.form("DC Form"):
@@ -309,17 +309,19 @@ with st.form("DC Form"):
 st.write("Simulation Results")
 with st.expander("", expanded=True):
 
-  col01, col02, col03, col04, col05 = st.columns([1,1,1,1,1])
+  col01, col02, col03, col04, col05, col06 = st.columns([1,1,1,1,1,1])
   with col01:
-    RG_METRIC_placeholder = st.empty()
-  with col02:
     GM_METRIC_placeholder = st.empty()
-  with col03:
-    TPU_METRIC_placeholder = st.empty()
-  with col04:
+  with col02:
     NPM_METRIC_placeholder = st.empty()
-  with col05:
+  with col03:
+    RG_METRIC_placeholder = st.empty()
+  with col04:
     TM_METRIC_placeholder = st.empty()
+  with col05:
+    TP_METRIC_placeholder = st.empty()
+  with col06:
+    TPU_METRIC_placeholder = st.empty()
 
   st.markdown('***')
 
@@ -327,33 +329,38 @@ with st.expander("", expanded=True):
   with col11:
     RG_CHART_placeholder = st.empty()
   with col12:
-    GM_CHART_placeholder = st.empty()
-  with col13:
     NPM_CHART_placeholder = st.empty()
+  with col13:
+    TM_CHART_placeholder = st.empty()
 
   col14, col15, col16 = st.columns([1,1,1])
   with col14:
-    TM_CHART_placeholder = st.empty()
-  with col15:
     TPU_CHART_placeholder = st.empty()
+  with col15:
+    # GM_CHART_placeholder = st.empty()
+    ADD_CHART2_placeholder = st.empty()
   with col16:
     ADD_CHART_placeholder = st.empty()
 
     # Chart value averages 
-    RG_AVG = round(Spark_outputs["Revenue Growth"], 1)
-    RG_METRIC_placeholder.metric(label='Avg Revenue Growth ($)', value=RG_AVG) 
+    RG_AVG = round(Spark_outputs["Revenue Growth"] * 100, 2)
+    RG_METRIC_placeholder.metric(label='Revenue Growth (%)', value=f"{RG_AVG}%" if RG_AVG != 0 else "N/A") 
 
-    GM_AVG = round(Spark_outputs["Gross Margin"], 1)
-    GM_METRIC_placeholder.metric(label='Avg Gross Margin ($)', value=GM_AVG)
+    GM_AVG = round(Spark_outputs["Gross Margin"] * 100, 1)
+    GM_METRIC_placeholder.metric(label='Gross Margin (%)', value=f"{GM_AVG}%" if GM_AVG != 0 else "N/A")
 
-    NPM_AVG = round(Spark_outputs["Net Margin"], 2)
-    NPM_METRIC_placeholder.metric(label='Avg Net Profit Margin ($)', value=NPM_AVG)
+    NPM_AVG = round(Spark_outputs["Net Margin"] * 100, 2)
+    NPM_METRIC_placeholder.metric(label='Net Margin (%)', value=f"{NPM_AVG}%" if NPM_AVG != 0 else "N/A")
 
     TM_AVG = round(Spark_outputs["Target Multilple"], 2)
-    TM_METRIC_placeholder.metric(label='Avg Target Multiple ($)', value=TM_AVG)
+    TM_METRIC_placeholder.metric(label='Target Multiple (x)', value=str(TM_AVG) if TM_AVG != 0 else "N/A")
 
-    TPU_AVG = round(Spark_outputs["Target Price"], 2)
-    TPU_METRIC_placeholder.metric(label='Avg Target Price Upside ($)', value=TPU_AVG)
+    TP_AVG = round(Spark_outputs["Target Price"], 2)
+    TP_METRIC_placeholder.metric(label='Target Price ($)', value=str(TP_AVG) if TP_AVG != 0 else "N/A")
+
+    TPU_AVG = round(Spark_outputs["Target Price (Upside)"], 2)
+    TPU_METRIC_placeholder.metric(label='Target Price Upside ($)', value=str(TPU_AVG) if TPU_AVG != 0 else "N/A")
+
 
   #generate line chart of results
   if not DCerrors:
@@ -366,14 +373,14 @@ with st.expander("", expanded=True):
     chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
     RG_CHART_placeholder.pyplot(chart_fig)
 
-    data_rg = pd.DataFrame(Spark_outputs["rg_htable"])
-    value_pairs_rg = {
-      "Min": round(Spark_outputs["minmaxtable"][1]["Gross Margin"], 1),
-      "Max": round(Spark_outputs["minmaxtable"][2]["Gross Margin"], 1),
-      "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Gross Margin"]
-    }
-    chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Gross Margin")
-    GM_CHART_placeholder.pyplot(chart_fig)
+    # data_rg = pd.DataFrame(Spark_outputs["gm_htable"])
+    # value_pairs_rg = {
+    #   "Min": round(Spark_outputs["minmaxtable"][1]["Gross Margin"], 1),
+    #   "Max": round(Spark_outputs["minmaxtable"][2]["Gross Margin"], 1),
+    #   "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Gross Margin"]
+    # }
+    # chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Gross Margin")
+    # GM_CHART_placeholder.pyplot(chart_fig)
 
     data_npm = pd.DataFrame(Spark_outputs["npm_htable"])
     value_pairs_npm = {
@@ -410,27 +417,6 @@ with st.expander("", expanded=True):
         except (TypeError, ValueError):
             # If there is an error during formatting, return a default string
             return "N/A"
-  
-    # DCRG_Avg = safe_format(Spark_outputs.get("Revenue Growth", "N/A"))
-    # DCRG_Avg_placeholder.info(f"**Avg Revenue Growth**: {DCRG_Avg}")
-
-    # DCNPM_Avg = safe_format(Spark_outputs.get("Net Margin", "N/A"))
-    # DCNPM_Avg_placeholder.info(f"**Avg Net Profit Margin**: {DCNPM_Avg}")
-
-    # DCTM_Avg = safe_format(Spark_outputs.get("Target Multiple", "N/A"))  # Fixed typo in "Multiple"
-    # DCTM_Avg_placeholder.info(f"**Avg Target Multiple**: {DCTM_Avg}")
-
-    # DCTPU_Avg = safe_format(Spark_outputs.get("Target Price", "N/A"))
-    # DCTPU_Avg_placeholder.info(f"**Avg TPU**: {DCTPU_Avg}")
-
-    # DCAvgCost = safe_format(Spark_outputs.get("COGS", "N/A"))
-    # DCAvgCost_placeholder.metric(label='Avg Cost of Goods ($)', value=DCAvgCost)
-
-    # DCAvgProfit = safe_format(Spark_outputs.get("Profit bf Tax", "N/A"))
-    # DCAvgProfit_placeholder.metric(label='Avg Profit b.Tax ($)', value=DCAvgProfit)
-
-    # DCAvgRevenue = safe_format(Spark_outputs.get("Revenue", "N/A"))
-    # DCAvgRevenue_placeholder.metric(label='Avg Revenue ($)', value=DCAvgRevenue)
 
     initState = False
   else:

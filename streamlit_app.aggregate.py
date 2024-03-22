@@ -188,12 +188,12 @@ with st.form("DC Form"):
 
   col01, col02 = st.columns([1,1])
   with col01:
-    SectorOptions = ["ALL", "Gaming", "Energy", "F&B"]
+    SectorOptions = ["ALL", "Gaming", "Energy", "Healthcare", "F&B", "Healthcare", "Banking", "Technology", "Technology"]
     SectorInput = st.selectbox("Sector", SectorOptions)
 
   with col02:
     # make an array with string all, china korea japan
-    RegionOptions = ["ALL", "China", "Korea", "Japan"]
+    RegionOptions = ["ALL", "China", "Korea", "Australia", "China", "Australia", "Malaysia", "Singapore", "Taiwan"]
     RegionInput = st.selectbox("Region", RegionOptions)
 
   DCbutton_clicked = st.form_submit_button("Calculate")
