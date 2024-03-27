@@ -23,11 +23,12 @@ def definedCombination(inputdata):
        "request_data": {
           "inputs": {
             "Base_Inputs": inputdata,
-            "CompanyName": selectedCompany
+            "CompanyName": selectedCompany, 
+            "Range_inSD": int(RangeinSD)
           }
        },
         "request_meta": {
-          "call_purpose": "CLSA FE",
+          "call_purpose": "Spark - API Tester",
           "source_system": "SPARK",
           "service_category": ""
         }
@@ -253,44 +254,78 @@ companyOptions = ['MGM China', 'PICC', 'Sungrow', 'Yum China', 'CSL', 'CIMB', 'G
 update_data = discoveryData.get("Model_Inputs")
 
 with st.expander("Spark Model", expanded=True):
-  st.markdown('[https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute](https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute)')
+  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test)')
+
+st.write("Select Parameters")
 
 with st.form("Company Form"):
   list_of_companies_data = discoveryData.get("listOfCompanies")
-
   if list_of_companies_data:
     companyOptions = [item["List of Companies"] for item in list_of_companies_data]
-
   selectedCompany = st.selectbox("Company", companyOptions)
-  SetCompanyButtonContainer = st.container()
+        
+
+  companyButton_clicked = st.form_submit_button("Set Company")
+  if companyButton_clicked:
+    st.write("button clicked")
+
 
 with st.form("DC Form"):
   Go = True
   ERRORBOX = st.empty()
   DCLoading = st.empty()
 
-  st.write("Enter Min & Max Inputs")
-  inputTableContainer = st.container()
-  DCbutton_clickedContainer = st.container()
+  def highlight_col(x):
+    r = 'background-color: #fafafa; color: #a0a0a0'
+    df1 = pd.DataFrame('', index=x.index, columns=x.columns)
+    df1.iloc[:, 1:] = r
+    return df1  
 
-st.write("  ")
-st.write("  ")
-st.write("  ")
+  # # Create a DataFrame from JSON data
+  # if 'df' not in st.session_state:
+  #   st.session_state.df = pd.DataFrame(json_data)
+  # numeric_columns = st.session_state.df.select_dtypes(include=[float, int]).columns
+  # # df[numeric_columns] = df[numeric_columns]
+  # # df[numeric_columns] = df[numeric_columns].applymap('{:.1f}'.format)
 
-with st.expander("", expanded=True):
-  col30, col31, col32, col33, col34 = st.columns([0.1,1,1,1,1])
-  with col30:
-    st.write("  ")
-  with col31:
-    LOGO_placeholder = st.empty()
-  with col32:  
-    COMPANY_placeholder = st.empty()
-  with col33:
-    REGION_placeholder = st.empty()
-  with col34:
-    SECTOR_placeholder = st.empty()
-  st.write("  ")
+  # inputTable = st.data_editor(
+  #   st.session_state.df.style.apply(highlight_col, axis=None),
+  #   use_container_width=True,
+  #   column_config={
+  #     "INPUTS": st.column_config.Column(disabled=True),
+  #     "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
+  #     "CURR - BASE": st.column_config.Column("CURR - BASE", disabled=True),
+  #     "NEXT - BASE": st.column_config.Column("NEXT - BASE", disabled=True),
+  #     "CURR - MIN": st.column_config.Column("CURR - MIN"),
+  #     "CURR -  MAX": st.column_config.Column("CURR -  MAX"),
+  #     "NEXT - MIN": st.column_config.Column("NEXT - MIN"),
+  #     "NEXT - MAX": st.column_config.Column("NEXT - MAX")
+  #   }
+  # )
 
+
+
+  DCbutton_clicked = st.form_submit_button("Generate Output")
+  if DCbutton_clicked: 
+    apiInput = multiply_and_convert_to_json(inputTable)
+    apiInput_dict = json.loads(apiInput)
+    DCalldata = definedCombination(apiInput_dict)
+    Spark_outputs = DCalldata.json()['response_data']['outputs']
+    # st.json(Spark_outputs)
+    DCerrors = DCalldata.json()['response_data']['errors']
+
+  # Add the style tag to change button color to blue
+  st.markdown("""
+  <style>
+      .stButton button { /* Adjust the class name according to your button's class */
+          background-color: blue !important;
+          color: white !important;
+      }
+  </style>
+  """, unsafe_allow_html=True)
+
+
+st.write("Simulation Results")
 with st.expander("", expanded=True):
 
   col01, col02, col03, col04, col05, col06 = st.columns([1,1,1,1,1,1])
@@ -326,62 +361,6 @@ with st.expander("", expanded=True):
   with col16:
     ADD_CHART_placeholder = st.empty()
 
-with SetCompanyButtonContainer:
-  st.form_submit_button("Set Company")
-
-  # Call discoveryAPI
-  response = discoveryAPI(selectedCompany)
-
-  # Parse the JSON response
-  discoveryData = response.json()['response_data']['outputs']
-  update_data = discoveryData.get("Model_Inputs")
-
-  with inputTableContainer:
-    for i in range(len(json_data)):
-      json_data[i]["INPUTS"] = update_data[i]["Model Inputs"]  # Update INPUTS with Model Inputs
-      json_data[i]["CURR - BASE"] = update_data[i]["CURR"]  # Update CURR - BASE with CURR
-      json_data[i]["NEXT - BASE"] = update_data[i]["NEXT"]  # Update NEXT - BASE with NEXT
-
-    def highlight_col(x):
-      r = 'background-color: #fafafa; color: #909090'
-      df1 = pd.DataFrame('', index=x.index, columns=x.columns)
-      df1.loc[:, :] = r
-      return df1  
-
-    # Create a DataFrame from JSON data
-    df = pd.DataFrame(json_data)
-    numeric_columns = df.select_dtypes(include=[float, int]).columns
-
-    inputTable = st.data_editor(
-      df.style.apply(highlight_col, axis=None),
-      use_container_width=True,
-      hide_index=True,
-      column_config={
-        "INPUTS": st.column_config.Column("INPUTS", disabled=True),
-        "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
-        "CURR - BASE": st.column_config.Column("CURR - BASE", disabled=True),
-        "NEXT - BASE": st.column_config.Column("NEXT - BASE", disabled=True),
-        "CURR - MIN": st.column_config.Column("CURR - MIN"),
-        "CURR -  MAX": st.column_config.Column("CURR -  MAX"),
-        "NEXT - MIN": st.column_config.Column("NEXT - MIN"),
-        "NEXT - MAX": st.column_config.Column("NEXT - MAX")
-      }
-    )
-
-  LOGO_placeholder.image(discoveryData.get("Logo URL"), caption="", width=200)
-  COMPANY_placeholder.metric("Company", selectedCompany)
-  REGION_placeholder.metric("Region", discoveryData.get("Region"))
-  SECTOR_placeholder.metric("Sector", discoveryData.get("Sector"))
-
-with DCbutton_clickedContainer:
-  DCbutton_clicked = st.form_submit_button("Generate Output")
-  if DCbutton_clicked: 
-    apiInput = multiply_and_convert_to_json(inputTable)
-    apiInput_dict = json.loads(apiInput)
-    DCalldata = definedCombination(apiInput_dict)
-    Spark_outputs = DCalldata.json()['response_data']['outputs']
-    DCerrors = DCalldata.json()['response_data']['errors']
-
     # Chart value averages 
     RG_AVG = round(Spark_outputs["Revenue Growth"] * 100, 2)
     RG_METRIC_placeholder.metric(label='Revenue Growth (%)', value=f"{RG_AVG}%" if RG_AVG != 0 else "N/A") 
@@ -400,66 +379,99 @@ with DCbutton_clickedContainer:
 
     TPU_AVG = round(Spark_outputs["Target Price (Upside)"], 2)
     TPU_METRIC_placeholder.metric(label='Target Price Upside ($)', value=str(TPU_AVG) if TPU_AVG != 0 else "N/A")
-    
-    #generate line chart of results
-    if not DCerrors:
-      data_rg = pd.DataFrame(Spark_outputs["rg_htable"])
-      value_pairs_rg = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Revenue Growth"], 1),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Revenue Growth"], 1),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Revenue Growth"]
-      }
-      chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
-      RG_CHART_placeholder.pyplot(chart_fig)
 
-      data_npm = pd.DataFrame(Spark_outputs["npm_htable"])
-      value_pairs_npm = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Net Profit Margin"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Net Profit Margin"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Net Profit Margin"]
-      }
-      chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
-      NPM_CHART_placeholder.pyplot(chart_fig)
 
-      data_tm = pd.DataFrame(Spark_outputs["TM_htable"])
-      value_pairs_tm = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Target multiple"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Target multiple"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target multiple"]
-      }
-      chart_fig = generate_comb_chart(data_tm, value_pairs_tm, "Target Multiple")
-      TM_CHART_placeholder.pyplot(chart_fig)
-
-      data_tpu = pd.DataFrame(Spark_outputs["TPU_htable"])
-      value_pairs_tpu = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Target Price upside"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Target Price upside"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target Price upside"]
-      }
-      chart_fig = generate_comb_chart(data_tpu, value_pairs_tpu, "Target Price Upside")
-      TPU_CHART_placeholder.pyplot(chart_fig)
-
-      # Function to format values safely
-      def safe_format(value):
-          try:
-              # If the value is zero or can be converted to a float, format it.
-              return "{:,.2f}".format(float(value))
-          except (TypeError, ValueError):
-              # If there is an error during formatting, return a default string
-              return "N/A"
-
-      initState = False
-    else:
-      error_messages = [error["message"] for error in DCerrors]
-      if error_messages:
-          ERRORBOX.error("\n ".join(error_messages))
-  
-# Add the style tag to change button color to blue
-st.markdown("""
-<style>
-    .stButton button { /* Adjust the class name according to your button's class */
-        background-color: blue !important;
-        color: white !important;
+  #generate line chart of results
+  if not DCerrors:
+    data_rg = pd.DataFrame(Spark_outputs["rg_htable"])
+    value_pairs_rg = {
+      "Min": round(Spark_outputs["minmaxtable"][1]["Revenue Growth"], 1),
+      "Max": round(Spark_outputs["minmaxtable"][2]["Revenue Growth"], 1),
+      "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Revenue Growth"]
     }
-</style>
-""", unsafe_allow_html=True)
+    chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
+    RG_CHART_placeholder.pyplot(chart_fig)
+
+    # data_rg = pd.DataFrame(Spark_outputs["gm_htable"])
+    # value_pairs_rg = {
+    #   "Min": round(Spark_outputs["minmaxtable"][1]["Gross Margin"], 1),
+    #   "Max": round(Spark_outputs["minmaxtable"][2]["Gross Margin"], 1),
+    #   "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Gross Margin"]
+    # }
+    # chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Gross Margin")
+    # GM_CHART_placeholder.pyplot(chart_fig)
+
+    data_npm = pd.DataFrame(Spark_outputs["npm_htable"])
+    value_pairs_npm = {
+      "Min": round(Spark_outputs["minmaxtable"][1]["Net Profit Margin"], 2),
+      "Max": round(Spark_outputs["minmaxtable"][2]["Net Profit Margin"], 2),
+      "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Net Profit Margin"]
+    }
+    chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
+    NPM_CHART_placeholder.pyplot(chart_fig)
+
+    data_tm = pd.DataFrame(Spark_outputs["TM_htable"])
+    value_pairs_tm = {
+      "Min": round(Spark_outputs["minmaxtable"][1]["Target multiple"], 2),
+      "Max": round(Spark_outputs["minmaxtable"][2]["Target multiple"], 2),
+      "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target multiple"]
+    }
+    chart_fig = generate_comb_chart(data_tm, value_pairs_tm, "Target Multiple")
+    TM_CHART_placeholder.pyplot(chart_fig)
+
+    data_tpu = pd.DataFrame(Spark_outputs["TPU_htable"])
+    value_pairs_tpu = {
+      "Min": round(Spark_outputs["minmaxtable"][1]["Target Price upside"], 2),
+      "Max": round(Spark_outputs["minmaxtable"][2]["Target Price upside"], 2),
+      "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target Price upside"]
+    }
+    chart_fig = generate_comb_chart(data_tpu, value_pairs_tpu, "Target Price Upside")
+    TPU_CHART_placeholder.pyplot(chart_fig)
+
+    # Function to format values safely
+    def safe_format(value):
+        try:
+            # If the value is zero or can be converted to a float, format it.
+            return "{:,.2f}".format(float(value))
+        except (TypeError, ValueError):
+            # If there is an error during formatting, return a default string
+            return "N/A"
+
+    initState = False
+  else:
+    error_messages = [error["message"] for error in DCerrors]
+    if error_messages:
+        ERRORBOX.error("\n ".join(error_messages))
+
+# Call discoveryAPI
+response = discoveryAPI(selectedCompany)
+
+# Parse the JSON response
+discoveryData = response.json()['response_data']['outputs']
+update_data = discoveryData.get("Model_Inputs")
+
+for i, item in enumerate(update_data):
+  st.session_state.df.at[i, "INPUTS"] = item["Model Inputs"]
+  st.session_state.df.at[i, "CURR - Base"] = item["CURR"]
+  st.session_state.df.at[i, "NEXT - Base"] = item["NEXT"]
+
+  # Create a DataFrame from JSON data
+  df = pd.DataFrame(json_data)
+  numeric_columns = df.select_dtypes(include=[float, int]).columns
+  # df[numeric_columns] = df[numeric_columns]
+  # df[numeric_columns] = df[numeric_columns].applymap('{:.1f}'.format)
+
+  inputTable.data_editor(
+    df.style.apply(highlight_col, axis=None),
+    use_container_width=True,
+    column_config={
+      "INPUTS": st.column_config.Column(disabled=True),
+      "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
+      "CURR - BASE": st.column_config.Column("CURR - BASE", disabled=True),
+      "NEXT - BASE": st.column_config.Column("NEXT - BASE", disabled=True),
+      "CURR - MIN": st.column_config.Column("CURR - MIN"),
+      "CURR -  MAX": st.column_config.Column("CURR -  MAX"),
+      "NEXT - MIN": st.column_config.Column("NEXT - MIN"),
+      "NEXT - MAX": st.column_config.Column("NEXT - MAX")
+    }
+  )
