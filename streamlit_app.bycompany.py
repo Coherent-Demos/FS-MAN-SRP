@@ -185,7 +185,9 @@ def multiply_and_convert_to_json(input_df):
     # Create a copy of the input DataFrame
     modified_df = input_df.copy()
 
-    for column in modified_df.columns[2:]:  # Start from the second column
+    for column in modified_df.columns[1:]:  # Start from the second column
+      # trim " %" from the end of the string
+      modified_df[column] = modified_df[column].str.rstrip(" %")
       modified_df[column] = pd.to_numeric(modified_df[column], errors='coerce', downcast='integer') / 100
 
     # Convert the DataFrame to JSON format
@@ -307,7 +309,7 @@ with inputTableContainer:
   df = pd.DataFrame(json_data)
   all_numeric_columns = df.select_dtypes(include=[float, int]).columns
 
-  columns_to_exclude = ['Historical 1 SD']
+  columns_to_exclude = []
   numeric_columns = [col for col in all_numeric_columns if col not in columns_to_exclude]
 
   df[numeric_columns] = df[numeric_columns] * 100
@@ -320,12 +322,12 @@ with inputTableContainer:
     column_config={
       "INPUTS": st.column_config.Column("INPUTS", disabled=True),
       "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
-      "CURR - BASE": st.column_config.Column("CURR - BASE (%)", disabled=True),
-      "NEXT - BASE": st.column_config.Column("NEXT - BASE (%)", disabled=True),
-      "CURR - MIN": st.column_config.Column("CURR - MIN (%)"),
-      "CURR -  MAX": st.column_config.Column("CURR -  MAX (%)"),
-      "NEXT - MIN": st.column_config.Column("NEXT - MIN (%)"),
-      "NEXT - MAX": st.column_config.Column("NEXT - MAX (%)")
+      "CURR - BASE": st.column_config.Column("CURR - BASE", disabled=True),
+      "NEXT - BASE": st.column_config.Column("NEXT - BASE", disabled=True),
+      "CURR - MIN": st.column_config.Column("CURR - MIN"),
+      "CURR -  MAX": st.column_config.Column("CURR -  MAX"),
+      "NEXT - MIN": st.column_config.Column("NEXT - MIN"),
+      "NEXT - MAX": st.column_config.Column("NEXT - MAX")
     }
   )
 
@@ -335,6 +337,7 @@ with DCbutton_clickedContainer:
     apiInput = multiply_and_convert_to_json(inputTable)
     apiInput_dict = json.loads(apiInput)
     DCalldata = definedCombination(apiInput_dict)
+    processingTime = DCalldata.json()['response_meta']['process_time']
     Spark_outputs = DCalldata.json()['response_data']['outputs']
     DCerrors = DCalldata.json()['response_data']['errors']
 
@@ -354,7 +357,13 @@ with DCbutton_clickedContainer:
           SECTOR_placeholder = st.empty()
         st.write("  ")
 
-      st.write(selectedCompany + " Results")
+      
+      colresults01, colresults02 = st.columns([1, 1])
+      with colresults01:
+        st.write(selectedCompany + " Results")
+      with colresults02: 
+        st.markdown(f"<p style='text-align: right;'>Processing Time: {processingTime} ms</p>", unsafe_allow_html=True)
+      
       with st.expander("", expanded=True):
 
         col01, col02, col03, col04, col05, col06 = st.columns([1,1,1,1,1,1])
