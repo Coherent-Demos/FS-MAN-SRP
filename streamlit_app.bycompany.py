@@ -253,7 +253,7 @@ companyOptions = ['MGM China', 'PICC', 'Sungrow', 'Yum China', 'CSL', 'CIMB', 'G
 update_data = discoveryData.get("Model_Inputs")
 
 with st.expander("Spark Model", expanded=True):
-  st.markdown('[https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute](https://excel.uat.jp.coherent.global/clsa/api/v3/folders/Aggregate%20Models/services/Output%20Analysis%20-%20by%20Company/execute)')
+  st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test)')
 
 with st.form("Company Form"):
   list_of_companies_data = discoveryData.get("listOfCompanies")
