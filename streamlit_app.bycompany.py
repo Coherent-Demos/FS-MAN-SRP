@@ -185,8 +185,8 @@ def multiply_and_convert_to_json(input_df):
     # Create a copy of the input DataFrame
     modified_df = input_df.copy()
 
-    for column in modified_df.columns[1:]:  # Start from the second column
-      modified_df[column] = pd.to_numeric(modified_df[column], errors='coerce', downcast='integer')
+    for column in modified_df.columns[2:]:  # Start from the second column
+      modified_df[column] = pd.to_numeric(modified_df[column], errors='coerce', downcast='integer') / 100
 
     # Convert the DataFrame to JSON format
     json_data = modified_df.to_json(orient='records')
@@ -255,14 +255,19 @@ update_data = discoveryData.get("Model_Inputs")
 with st.expander("Spark Model", expanded=True):
   st.markdown('[https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test](https://spark.uat.jp.coherent.global/clsa/products/Aggregate%20Models/Output%20Analysis%20-%20by%20Company/apiTester/test)')
 
-with st.form("Company Form"):
-  list_of_companies_data = discoveryData.get("listOfCompanies")
+st.write("  ")
 
-  if list_of_companies_data:
-    companyOptions = [item["List of Companies"] for item in list_of_companies_data]
-
+list_of_companies_data = discoveryData.get("listOfCompanies")
+if list_of_companies_data:
+  companyOptions = [item["List of Companies"] for item in list_of_companies_data]
+colcompany01, colcompany02, colcompany03 = st.columns([1, 1, 1])
+with colcompany01:  
   selectedCompany = st.selectbox("Company", companyOptions)
-  SetCompanyButtonContainer = st.container()
+with colcompany02:
+  st.write("  ")
+with colcompany03:
+  st.write("  ")
+  
 
 with st.form("DC Form"):
   Go = True
@@ -277,101 +282,52 @@ st.write("  ")
 st.write("  ")
 st.write("  ")
 
-with st.expander("", expanded=True):
-  col30, col31, col32, col33, col34 = st.columns([0.1,1,1,1,1])
-  with col30:
-    st.write("  ")
-  with col31:
-    LOGO_placeholder = st.empty()
-  with col32:  
-    COMPANY_placeholder = st.empty()
-  with col33:
-    REGION_placeholder = st.empty()
-  with col34:
-    SECTOR_placeholder = st.empty()
-  st.write("  ")
+ResultsContainer = st.container()
 
-with st.expander("", expanded=True):
+# Call discoveryAPI
+response = discoveryAPI(selectedCompany)
 
-  col01, col02, col03, col04, col05, col06 = st.columns([1,1,1,1,1,1])
-  with col01:
-    GM_METRIC_placeholder = st.empty()
-  with col02:
-    NPM_METRIC_placeholder = st.empty()
-  with col03:
-    RG_METRIC_placeholder = st.empty()
-  with col04:
-    TM_METRIC_placeholder = st.empty()
-  with col05:
-    TP_METRIC_placeholder = st.empty()
-  with col06:
-    TPU_METRIC_placeholder = st.empty()
+# Parse the JSON response
+discoveryData = response.json()['response_data']['outputs']
+update_data = discoveryData.get("Model_Inputs")
 
-  st.markdown('***')
+with inputTableContainer:
+  for i in range(len(json_data)):
+    json_data[i]["INPUTS"] = update_data[i]["Model Inputs"]  # Update INPUTS with Model Inputs
+    json_data[i]["CURR - BASE"] = update_data[i]["CURR"]  # Update CURR - BASE with CURR
+    json_data[i]["NEXT - BASE"] = update_data[i]["NEXT"]  # Update NEXT - BASE with NEXT
 
-  col11, col12, col13 = st.columns([1,1,1])
-  with col11:
-    RG_CHART_placeholder = st.empty()
-  with col12:
-    NPM_CHART_placeholder = st.empty()
-  with col13:
-    TM_CHART_placeholder = st.empty()
+  def highlight_col(x):
+    r = 'background-color: #fafafa; color: #909090'
+    df1 = pd.DataFrame('', index=x.index, columns=x.columns)
+    df1.loc[:, :] = r
+    return df1  
 
-  col14, col15, col16 = st.columns([1,1,1])
-  with col14:
-    TPU_CHART_placeholder = st.empty()
-  with col15:
-    # GM_CHART_placeholder = st.empty()
-    ADD_CHART2_placeholder = st.empty()
-  with col16:
-    ADD_CHART_placeholder = st.empty()
+  # Create a DataFrame from JSON data
+  df = pd.DataFrame(json_data)
+  all_numeric_columns = df.select_dtypes(include=[float, int]).columns
 
-with SetCompanyButtonContainer:
-  st.form_submit_button("Set Company")
+  columns_to_exclude = ['Historical 1 SD']
+  numeric_columns = [col for col in all_numeric_columns if col not in columns_to_exclude]
 
-  # Call discoveryAPI
-  response = discoveryAPI(selectedCompany)
+  df[numeric_columns] = df[numeric_columns] * 100
+  df[all_numeric_columns] = df[all_numeric_columns].applymap('{:.2f}'.format) + " %"
 
-  # Parse the JSON response
-  discoveryData = response.json()['response_data']['outputs']
-  update_data = discoveryData.get("Model_Inputs")
-
-  with inputTableContainer:
-    for i in range(len(json_data)):
-      json_data[i]["INPUTS"] = update_data[i]["Model Inputs"]  # Update INPUTS with Model Inputs
-      json_data[i]["CURR - BASE"] = update_data[i]["CURR"]  # Update CURR - BASE with CURR
-      json_data[i]["NEXT - BASE"] = update_data[i]["NEXT"]  # Update NEXT - BASE with NEXT
-
-    def highlight_col(x):
-      r = 'background-color: #fafafa; color: #909090'
-      df1 = pd.DataFrame('', index=x.index, columns=x.columns)
-      df1.loc[:, :] = r
-      return df1  
-
-    # Create a DataFrame from JSON data
-    df = pd.DataFrame(json_data)
-    numeric_columns = df.select_dtypes(include=[float, int]).columns
-
-    inputTable = st.data_editor(
-      df.style.apply(highlight_col, axis=None),
-      use_container_width=True,
-      hide_index=True,
-      column_config={
-        "INPUTS": st.column_config.Column("INPUTS", disabled=True),
-        "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
-        "CURR - BASE": st.column_config.Column("CURR - BASE", disabled=True),
-        "NEXT - BASE": st.column_config.Column("NEXT - BASE", disabled=True),
-        "CURR - MIN": st.column_config.Column("CURR - MIN"),
-        "CURR -  MAX": st.column_config.Column("CURR -  MAX"),
-        "NEXT - MIN": st.column_config.Column("NEXT - MIN"),
-        "NEXT - MAX": st.column_config.Column("NEXT - MAX")
-      }
-    )
-
-  LOGO_placeholder.image(discoveryData.get("Logo URL"), caption="", width=200)
-  COMPANY_placeholder.metric("Company", selectedCompany)
-  REGION_placeholder.metric("Region", discoveryData.get("Region"))
-  SECTOR_placeholder.metric("Sector", discoveryData.get("Sector"))
+  inputTable = st.data_editor(
+    df.style.apply(highlight_col, axis=None),
+    use_container_width=True,
+    hide_index=True,
+    column_config={
+      "INPUTS": st.column_config.Column("INPUTS", disabled=True),
+      "Historical 1 SD": st.column_config.Column("Historical 1 SD", disabled=True),
+      "CURR - BASE": st.column_config.Column("CURR - BASE (%)", disabled=True),
+      "NEXT - BASE": st.column_config.Column("NEXT - BASE (%)", disabled=True),
+      "CURR - MIN": st.column_config.Column("CURR - MIN (%)"),
+      "CURR -  MAX": st.column_config.Column("CURR -  MAX (%)"),
+      "NEXT - MIN": st.column_config.Column("NEXT - MIN (%)"),
+      "NEXT - MAX": st.column_config.Column("NEXT - MAX (%)")
+    }
+  )
 
 with DCbutton_clickedContainer:
   DCbutton_clicked = st.form_submit_button("Generate Output")
@@ -382,77 +338,134 @@ with DCbutton_clickedContainer:
     Spark_outputs = DCalldata.json()['response_data']['outputs']
     DCerrors = DCalldata.json()['response_data']['errors']
 
-    # Chart value averages 
-    RG_AVG = round(Spark_outputs["Revenue Growth"] * 100, 2)
-    RG_METRIC_placeholder.metric(label='Revenue Growth (%)', value=f"{RG_AVG}%" if RG_AVG != 0 else "N/A") 
+    with ResultsContainer:
+      st.write(selectedCompany + " Info")
+      with st.expander("", expanded=True):
+        col30, col31, col32, col33, col34 = st.columns([0.1,1,1,1,1])
+        with col30:
+          st.write("  ")
+        with col31:
+          LOGO_placeholder = st.empty()
+        with col32:  
+          COMPANY_placeholder = st.empty()
+        with col33:
+          REGION_placeholder = st.empty()
+        with col34:
+          SECTOR_placeholder = st.empty()
+        st.write("  ")
 
-    GM_AVG = round(Spark_outputs["Gross Margin"] * 100, 1)
-    GM_METRIC_placeholder.metric(label='Gross Margin (%)', value=f"{GM_AVG}%" if GM_AVG != 0 else "N/A")
+      st.write(selectedCompany + " Results")
+      with st.expander("", expanded=True):
 
-    NPM_AVG = round(Spark_outputs["Net Margin"] * 100, 2)
-    NPM_METRIC_placeholder.metric(label='Net Margin (%)', value=f"{NPM_AVG}%" if NPM_AVG != 0 else "N/A")
+        col01, col02, col03, col04, col05, col06 = st.columns([1,1,1,1,1,1])
+        with col01:
+          GM_METRIC_placeholder = st.empty()
+        with col02:
+          NPM_METRIC_placeholder = st.empty()
+        with col03:
+          RG_METRIC_placeholder = st.empty()
+        with col04:
+          TM_METRIC_placeholder = st.empty()
+        with col05:
+          TP_METRIC_placeholder = st.empty()
+        with col06:
+          TPU_METRIC_placeholder = st.empty()
 
-    TM_AVG = round(Spark_outputs["Target Multilple"], 2)
-    TM_METRIC_placeholder.metric(label='Target Multiple (x)', value=str(TM_AVG) if TM_AVG != 0 else "N/A")
+        st.markdown('***')
 
-    TP_AVG = round(Spark_outputs["Target Price"], 2)
-    TP_METRIC_placeholder.metric(label='Target Price ($)', value=str(TP_AVG) if TP_AVG != 0 else "N/A")
+        col11, col12, col13 = st.columns([1,1,1])
+        with col11:
+          RG_CHART_placeholder = st.empty()
+        with col12:
+          NPM_CHART_placeholder = st.empty()
+        with col13:
+          TM_CHART_placeholder = st.empty()
 
-    TPU_AVG = round(Spark_outputs["Target Price (Upside)"], 2)
-    TPU_METRIC_placeholder.metric(label='Target Price Upside ($)', value=str(TPU_AVG) if TPU_AVG != 0 else "N/A")
-    
-    #generate line chart of results
-    if not DCerrors:
-      data_rg = pd.DataFrame(Spark_outputs["rg_htable"])
-      value_pairs_rg = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Revenue Growth"], 1),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Revenue Growth"], 1),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Revenue Growth"]
-      }
-      chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
-      RG_CHART_placeholder.pyplot(chart_fig)
+        col14, col15, col16 = st.columns([1,1,1])
+        with col14:
+          TPU_CHART_placeholder = st.empty()
+        with col15:
+          # GM_CHART_placeholder = st.empty()
+          ADD_CHART2_placeholder = st.empty()
+        with col16:
+          ADD_CHART_placeholder = st.empty()
 
-      data_npm = pd.DataFrame(Spark_outputs["npm_htable"])
-      value_pairs_npm = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Net Profit Margin"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Net Profit Margin"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Net Profit Margin"]
-      }
-      chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
-      NPM_CHART_placeholder.pyplot(chart_fig)
+      LOGO_placeholder.image(discoveryData.get("Logo URL"), caption="", width=200)
+      COMPANY_placeholder.metric("Company", selectedCompany)
+      REGION_placeholder.metric("Region", discoveryData.get("Region"))
+      SECTOR_placeholder.metric("Sector", discoveryData.get("Sector"))
 
-      data_tm = pd.DataFrame(Spark_outputs["TM_htable"])
-      value_pairs_tm = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Target multiple"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Target multiple"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target multiple"]
-      }
-      chart_fig = generate_comb_chart(data_tm, value_pairs_tm, "Target Multiple")
-      TM_CHART_placeholder.pyplot(chart_fig)
+      # Chart value averages 
+      RG_AVG = round(Spark_outputs["Revenue Growth"] * 100, 2)
+      RG_METRIC_placeholder.metric(label='Revenue Growth (%)', value=f"{RG_AVG}%" if RG_AVG != 0 else "N/A") 
 
-      data_tpu = pd.DataFrame(Spark_outputs["TPU_htable"])
-      value_pairs_tpu = {
-        "Min": round(Spark_outputs["minmaxtable"][1]["Target Price upside"], 2),
-        "Max": round(Spark_outputs["minmaxtable"][2]["Target Price upside"], 2),
-        "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target Price upside"]
-      }
-      chart_fig = generate_comb_chart(data_tpu, value_pairs_tpu, "Target Price Upside")
-      TPU_CHART_placeholder.pyplot(chart_fig)
+      GM_AVG = round(Spark_outputs["Gross Margin"] * 100, 1)
+      GM_METRIC_placeholder.metric(label='Gross Margin (%)', value=f"{GM_AVG}%" if GM_AVG != 0 else "N/A")
 
-      # Function to format values safely
-      def safe_format(value):
-          try:
-              # If the value is zero or can be converted to a float, format it.
-              return "{:,.2f}".format(float(value))
-          except (TypeError, ValueError):
-              # If there is an error during formatting, return a default string
-              return "N/A"
+      NPM_AVG = round(Spark_outputs["Net Margin"] * 100, 2)
+      NPM_METRIC_placeholder.metric(label='Net Margin (%)', value=f"{NPM_AVG}%" if NPM_AVG != 0 else "N/A")
 
-      initState = False
-    else:
-      error_messages = [error["message"] for error in DCerrors]
-      if error_messages:
-          ERRORBOX.error("\n ".join(error_messages))
+      TM_AVG = round(Spark_outputs["Target Multilple"], 2)
+      TM_METRIC_placeholder.metric(label='Target Multiple (x)', value=str(TM_AVG) if TM_AVG != 0 else "N/A")
+
+      TP_AVG = round(Spark_outputs["Target Price"], 2)
+      TP_METRIC_placeholder.metric(label='Target Price ($)', value=str(TP_AVG) if TP_AVG != 0 else "N/A")
+
+      TPU_AVG = round(Spark_outputs["Target Price (Upside)"], 2)
+      TPU_METRIC_placeholder.metric(label='Target Price Upside ($)', value=str(TPU_AVG) if TPU_AVG != 0 else "N/A")
+      
+      #generate line chart of results
+      if not DCerrors:
+        data_rg = pd.DataFrame(Spark_outputs["rg_htable"])
+        value_pairs_rg = {
+          "Min": round(Spark_outputs["minmaxtable"][1]["Revenue Growth"], 1),
+          "Max": round(Spark_outputs["minmaxtable"][2]["Revenue Growth"], 1),
+          "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Revenue Growth"]
+        }
+        chart_fig = generate_comb_chart(data_rg, value_pairs_rg, "Revenue Growth")
+        RG_CHART_placeholder.pyplot(chart_fig)
+
+        data_npm = pd.DataFrame(Spark_outputs["npm_htable"])
+        value_pairs_npm = {
+          "Min": round(Spark_outputs["minmaxtable"][1]["Net Profit Margin"], 2),
+          "Max": round(Spark_outputs["minmaxtable"][2]["Net Profit Margin"], 2),
+          "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Net Profit Margin"]
+        }
+        chart_fig = generate_comb_chart(data_npm, value_pairs_npm, "Net Profit Margin")
+        NPM_CHART_placeholder.pyplot(chart_fig)
+
+        data_tm = pd.DataFrame(Spark_outputs["TM_htable"])
+        value_pairs_tm = {
+          "Min": round(Spark_outputs["minmaxtable"][1]["Target multiple"], 2),
+          "Max": round(Spark_outputs["minmaxtable"][2]["Target multiple"], 2),
+          "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target multiple"]
+        }
+        chart_fig = generate_comb_chart(data_tm, value_pairs_tm, "Target Multiple")
+        TM_CHART_placeholder.pyplot(chart_fig)
+
+        data_tpu = pd.DataFrame(Spark_outputs["TPU_htable"])
+        value_pairs_tpu = {
+          "Min": round(Spark_outputs["minmaxtable"][1]["Target Price upside"], 2),
+          "Max": round(Spark_outputs["minmaxtable"][2]["Target Price upside"], 2),
+          "Analyst Prediction": Spark_outputs["minmaxtable"][0]["Target Price upside"]
+        }
+        chart_fig = generate_comb_chart(data_tpu, value_pairs_tpu, "Target Price Upside")
+        TPU_CHART_placeholder.pyplot(chart_fig)
+
+        # Function to format values safely
+        def safe_format(value):
+            try:
+                # If the value is zero or can be converted to a float, format it.
+                return "{:,.2f}".format(float(value))
+            except (TypeError, ValueError):
+                # If there is an error during formatting, return a default string
+                return "N/A"
+
+        initState = False
+      else:
+        error_messages = [error["message"] for error in DCerrors]
+        if error_messages:
+            ERRORBOX.error("\n ".join(error_messages))
   
 # Add the style tag to change button color to blue
 st.markdown("""

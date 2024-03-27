@@ -22,8 +22,8 @@ def definedCombination():
     payload = json.dumps({
        "request_data": {
           "inputs": {
-            "SECTOR": SectorInput,
-            "REGION": RegionInput
+            "SECTOR": SectorInput.split(" ⠀ ")[1],
+            "REGION": RegionInput.split(" ⠀ ")[1]
           }
        },
         "request_meta": {
@@ -209,25 +209,30 @@ response = discoveryAPI()
 discoveryData = response.json()['response_data']['outputs']
 update_data = discoveryData.get("Model_Inputs")
    
-st.write("Select Parameters")
 with st.form("DC Form"):
   
   Go = True
   ERRORBOX = st.empty()
   DCLoading = st.empty()
 
-  col01, col02 = st.columns([1,1])
+  col01, col02, col03, col04 = st.columns([1, 1, 1, 1])
   with col01:
     list_of_sectors_data = discoveryData.get("listOfSectors")
     if list_of_sectors_data:
-      SectorOptions = ["ALL"] + [item["List of Sectors"] for item in list_of_sectors_data]
+      SectorOptions = ["ALL"] + [f"{item.get('Icon', '')} ⠀ {item['List of Sectors']}" for item in list_of_sectors_data]
       SectorInput = st.selectbox("Sector", SectorOptions)
 
   with col02:
     list_of_regions_data = discoveryData.get("listOfRegions")
     if list_of_regions_data:
-      RegionOptions = ["ALL"] + [item["List of Regions"] for item in list_of_regions_data]
-      RegionInput = st.selectbox("Sector", RegionOptions)
+      RegionOptions = ["ALL"] + [f"{item.get('Icon', '')} ⠀ {item['List of Regions']}" for item in list_of_regions_data]
+      RegionInput = st.selectbox("Region", RegionOptions)
+
+  with col03:
+    st.text("‎")
+
+  with col04:
+    st.text("‎")
 
   DCbutton_clicked = st.form_submit_button("Calculate")
   if DCbutton_clicked:   
@@ -250,10 +255,26 @@ with st.form("DC Form"):
 st.write("Results")
 with st.expander("", expanded=True):
   NumCompanies_Metric_placeholder = st.empty()
-  st.write('Filtered Companies:')
   SummaryOfCompanies_Df_placeholder = st.empty()
 
-  NumCompanies_Metric_placeholder.metric("Number of Companies", outputs['noOfCompanies_filtered'])
+  NumCompanies_Metric_placeholder.metric("Number of Companies Filtered", outputs['noOfCompanies_filtered'])
   
   SummaryOfCompanies_Df = pd.DataFrame(outputs['CompanyResults'])
-  SummaryOfCompanies_Df_placeholder.dataframe(SummaryOfCompanies_Df, use_container_width=True)
+  
+  # Create the mapping
+  company_logos = {company["List of Companies"]: company["Logo"] for company in discoveryData["listOfCompanies"]}
+
+  # Add the "Logo" column based on "List of Companies"
+  SummaryOfCompanies_Df['Logo'] = SummaryOfCompanies_Df['CompanyName'].map(company_logos)
+
+  # Make "Logo" the first column
+  SummaryOfCompanies_Df.insert(0, 'Logo', SummaryOfCompanies_Df.pop('Logo'))
+
+  SummaryOfCompanies_Df_placeholder.data_editor(
+    SummaryOfCompanies_Df,
+    use_container_width=True,
+    hide_index=True,
+    column_config={
+      "Logo": st.column_config.ImageColumn("", width=200, help="Streamlit app preview screenshots")
+    }
+  )
