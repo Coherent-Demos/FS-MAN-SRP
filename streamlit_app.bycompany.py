@@ -296,6 +296,7 @@ update_data = discoveryData.get("Model_Inputs")
 with inputTableContainer:
   for i in range(len(json_data)):
     json_data[i]["INPUTS"] = update_data[i]["Model Inputs"]  # Update INPUTS with Model Inputs
+    json_data[i]["Historical 1 SD"] = update_data[i]["HISTORICAL 1SD"]  # Update SD with Model Inputs
     json_data[i]["CURR - BASE"] = update_data[i]["CURR"]  # Update CURR - BASE with CURR
     json_data[i]["NEXT - BASE"] = update_data[i]["NEXT"]  # Update NEXT - BASE with NEXT
 
